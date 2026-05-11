@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 
-
 export const GlobalStyle = createGlobalStyle`
     * {
     margin: 0;
@@ -9,8 +8,8 @@ export const GlobalStyle = createGlobalStyle`
     }
     
     body {
-        font-family: "Pretendard Variables", sans-serif
-    background-color: ${props => props.theme.colors.background.default};
+        font-family: "Pretendard Variables", sans-serif;
+        background-color: ${props => props.theme.colors.background.default};
         color: ${props => props.theme.colors.text.default};
     }
     
@@ -29,7 +28,7 @@ export const GlobalStyle = createGlobalStyle`
     input, textarea {
         font-family: inherit;
          &:hover {
-             
+             outline: none;
          }
     }
 `;
