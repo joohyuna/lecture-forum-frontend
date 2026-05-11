@@ -39,4 +39,3 @@ export const darkTheme: DefaultTheme = {
         info: "#60A5FA",
     },
 };
-

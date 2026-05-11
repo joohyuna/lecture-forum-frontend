@@ -5,10 +5,12 @@ import { lightTheme } from "./styles/theme.ts";
 import { GlobalStyle } from "./styles/GlobalStyle.tsx";
 
 function App() {
-    return <ThemeProvider theme={lightTheme}>
-        <GlobalStyle />
-    <RouterProvider router={GetRouter}></RouterProvider>
-    </ThemeProvider>
+    return (
+        <ThemeProvider theme={lightTheme}>
+            <GlobalStyle />
+            <RouterProvider router={GetRouter}></RouterProvider>
+        </ThemeProvider>
+    );
 }
 
 export default App;

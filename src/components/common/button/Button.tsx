@@ -10,13 +10,13 @@ const StyledButton = styled.button<{ $color: ButtonColorType; $variant: ButtonVa
     color: ${props => (props.$variant === "contained" ? "#ffffff" : "inherit")};
     background-color: ${props =>
         props.$variant === "contained" ? props.theme.colors[props.$color] : "transparent"};
-    padding: ${props => props.$variant === "icon" ? "8px" : "8px 12px"};
-    border-radius: ${props => props.$variant === "icon" ? "50%" : "6px"};
+    padding: ${props => (props.$variant === "icon" ? "8px" : "8px 12px")};
+    border-radius: ${props => (props.$variant === "icon" ? "50%" : "6px")};
     transition: all 0.5s;
     &:hover {
         filter: brightness(0.8);
         background-color: ${props =>
-            props.$variant === "contained" ? undefined : props.theme.colors.background.default };
+            props.$variant === "contained" ? undefined : props.theme.colors.background.default};
     }
 `;
 
@@ -29,14 +29,14 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode;
     color: ButtonColorType;
     variant: ButtonVariantType;
-    as?: ElementType,
+    as?: ElementType;
     to?: string;
     // Button 컴포넌트가 받아야 되는 내용의 타입
-};
+}
 function Button({ children, color, variant, ...props }: Props) {
     // 실제 내용이 들어오는 자리
     return (
-        <StyledButton $color={color} $variant={variant} {...props as any} >
+        <StyledButton $color={color} $variant={variant} {...(props as any)}>
             {children}
         </StyledButton>
     );
