@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router";
 import { IoChatbubbles, IoMoon } from "react-icons/io5";
+import Button from "../common/button/Button.tsx";
 
 const HeaderContainer = styled.header`
     position: sticky;
@@ -62,20 +63,9 @@ const TextButton = styled.button`
     }
 `;
 
-const PrimaryButton = styled.button`
-    font-size: 14px;
-    font-weight: 600;
-    color: #ffffff;
-    background-color: ${props => props.theme.colors.primary};
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: all 0.5s;
-    &:hover {
-        filter: brightness(0.8);
-    }
-`;
 
 function MainHeader() {
+    // const navigate = useNavigate();
     return (
         <HeaderContainer>
             <HeaderInner>
@@ -88,7 +78,7 @@ function MainHeader() {
                         <IoMoon size={20} />
                     </IconButton>
                     <TextButton as={Link} to={"/auth/login"}>로그인</TextButton>
-                    <PrimaryButton as={Link} to={"/auto/signup"}>회원가입</PrimaryButton>
+                    <Button color={"primary"}>회원가입</Button>
                 </NavGroup>
             </HeaderInner>
         </HeaderContainer>
