@@ -18,8 +18,8 @@ export const signUpSchema = z.object({
         .max(10, "닉네임은 10자 이하로 입력해주세요"),
     email: z.email("올바른 이메일 형식이 아닙니다."), // 자동, 으로 zod에 형식이 있다 email이라는
     // phoneNumber : input type = "tel"  => string  xxx-xxxx-xxxx
-    phoneNumber: z.string().regex(phoneRegex, "올바른 전화번호 형식이 아닙니다.").optional,
-    birthday: z.string().optional(), //  optional 뜻 프론트앤드세ㅕ 설명
+    phoneNumber: z.string().regex(phoneRegex, "올바른 전화번호 형식이 아닙니다.").optional(),
+    birthdate: z.string().optional(), //  optional 뜻 프론트앤드에서 설명
     gender: z.enum(Gender),
 })
     .refine(data => data.password === data.passwordConfirm, {

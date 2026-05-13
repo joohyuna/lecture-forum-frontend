@@ -18,6 +18,9 @@ const MainContainer = styled.main`
     padding: 40px 20px; 
 `;
 
+
+
+// <Outlet /> 자식 페이지가 들어가는 자리
 function MainLayout() {
     return (
         <LayoutWrapper>
