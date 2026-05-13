@@ -9,13 +9,13 @@ const StyledButton = styled.button<{
     $variant: ButtonVariantType;
     $fullWidth?: boolean;
 }>`
-    width: ${props => props.$fullWidth ? "100%" : "auto"};
+    width: ${props => (props.$fullWidth ? "100%" : "auto")};
     font-size: 14px;
     font-weight: 600;
     color: ${props => (props.$variant === "contained" ? "#ffffff" : "inherit")};
     background-color: ${props =>
         props.$variant === "contained" ? props.theme.colors[props.$color] : "transparent"};
-    padding: ${props => (props.$variant === "icon" ? "8px" : "8px 12px")};
+    padding: ${props => (props.$variant === "icon" ? "8px 8px 4px" : "8px 12px")};
     border-radius: ${props => (props.$variant === "icon" ? "50%" : "6px")};
     transition: all 0.5s;
     &:hover {
