@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../types/user.type.ts";
 import Button from "../../../components/common/button/Button.tsx";
 import { useNavigate } from "react-router";
+import axiosInstance from "../../../api/axiosInstance.ts";
+import * as axios from "axios";
 
 function SignUpPage() {
     const navigate = useNavigate();
@@ -51,56 +53,33 @@ function SignUpPage() {
             // passwordConfirm 문법 오류 라는 뜻 실행에는 문제가 되지 않는다 ESLint 문법검사기가 잡은 에러
             const { passwordConfirm, ...submitDate } = data;
 
-            // submitDate를 백엔드에게 전송 =>  fetch를 해준다? => 비동기 함수내 => async-await => try-catch로 묶어줌
-            // fetch(주소, 욥션); => 주소는 필수값, 옵션은 선택값
-            // 옵션 객체 {method, header, body}
-            // 백엔드가 성공으로 응답하면 response로 가며
-            // 실패되면 catch간다.
+            // 200번때 일때만 성공 진짜 성공에 대한 내용만 남는다.
+            // fetch()로 통신을 하면, 백엔드에 전달해주는 response가 존재하기만 하면 성공으로 판단하지만
+            // axios로 통신을 하면, 백엔드가 2xx벉대 성공 코드를 전달해줘야만 성공으로 판단
+            // 이외의 에러는 catch로 처리됨
+            await axiosInstance.post("/user/create", submitDate);
 
-            const response = await fetch("http://localhost:8000/user/create", {
-                // 전송을 했다 => 전송해서 응답을 받았다
-                // fetch는 응답만 오면 성공
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(submitDate), // 객체를 그대로 보낼 수 없고, JSON.string()를 통해 JSON형식의 string으로 변환
-            });
-
-            // response도 http메세지 내용이 기록되기 때문에 string을 JSON으로 파싱해야 함
-            // response = { ok: boolean, message: string }
-            // response.json()을 하게되면 백엔드에서 응답한 내용인 response.message를 JSON으로 파싱해야함
-            const result = await response.json();
-
-            // 우리의 논리를 통해, "우리가 생각하는 " 성공인지를 판별
-            // response.ok  프로퍼티 안에 response 상태코드가 200번대라면 true, 아니라면 false
-            // throw 키워드는 예외를 발생시켜 catch로 내가 임의적으로 보내는 것
-            if (!response.ok) {
-                throw new Error(result.message || "회원가입 중 오류가 발생했습니다.");
-            }
+            // 성공을 했었을 때 백엔드가 전달해준 내용은 response.date에 객체 상태로 존재함 (JSON 파싱할 필요 없음)
 
             // 백엔드에게 전송해서 성공
             alert("회원가입이 완료되었습니다. 로그인을 진행해주세요");
             navigate("/auth/signin");
         } catch (error) {
-            if (error instanceof Error) {
-                const errorMessage = error.message;
+            // 기본 에러 메세지를 미리 넣어서 errorMessage 마련
+            let errorMessage = "회원가입 중 오류가 발생했습니다.";
 
-                if (errorMessage === "이미 사용 중인 아이디입니다.") {
-                    setError("username", { message: errorMessage });
-                } else if (errorMessage === "이미 가입된 이메일 입니다.") {
-                    setError("email", { message: errorMessage });
-                } else if (errorMessage === "이미 사용중인 닉네임입니다.") {
-                    setError("nickname", { message: errorMessage });
-                } else {
-                    setError("root", { message: errorMessage });
-                }
+            // 지금 catch된 error가 axios의 에러인지 판별
+            if (axios.isAxiosError(error)) {
+                // axios에서 발생된 에러라면, 백엔드엥 제공을 한 내용이 error.response.data.messaged애 존재
+                //  그백엔등에 전달해준 내용을 errorMessage에 저장
+                errorMessage = error.response?.data?.message || errorMessage;
+            } else if (error instanceof Error) {
+                // axios에서 발생한 에러가 아닌, 자바스크립트에 표준에러 객체관리
+                // error.message에 담긴 에러 내용을 errorMessage에 저장
+                errorMessage = error.message;
             }
 
-            console.error(error);
-
-            // 백엔드에게 전송해서 실패
-            setError("root", { message: "회원가입에 실패했습니다. 다시 시도해주세요" });
+            setError("root", {message: errorMessage});
         }
     };
 
@@ -220,6 +199,9 @@ function SignUpPage() {
                         {errors.gender && <ErrorMessage>{errors.gender.message}</ErrorMessage>}
                     </InputGroup>
                 </FormBox>
+
+                {errors.root && <RootErrorMessage>{errors.root.message}</RootErrorMessage>}
+
                 <Button
                     color={"primary"}
                     variant={"contained"}
@@ -326,4 +308,12 @@ const Select = styled.select<{ $hasError?: boolean }>`
         border-color: ${props =>
             props.$hasError ? props.theme.colors.error : props.theme.colors.primary};
     }
+`;
+
+const RootErrorMessage = styled.p`
+    font-size: 14px;
+    text-align: center;
+    color: ${props => props.theme.colors.error};
+    font-weight: 500;
+    margin-bottom: 50px;
 `;
