@@ -7,6 +7,7 @@ const phoneRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 // password와 passwordConfirm은 두 항목이 일치 하는지 검증해야함
 // 여거 항목에 대한 뎐결 검증은 메소드 체인을 통해 .refine(함수, 옵션) 메소드 사용
 // 옵션에 들어가는 내용은 에러가 발새됐을 때, 검증 실패했을 때 어느 자리에 어떤 에러메세지를 출력할지 정함
+// zod객체를 만들어줌
 export const signUpSchema = z.object({
     username: z.string().min(4, "아이디는 4자 이상 입력해주세요."),
     password: z.string().min(6, "비밀번호는 6자이상 입력해주세요."),
@@ -20,7 +21,7 @@ export const signUpSchema = z.object({
     // phoneNumber : input type = "tel"  => string  xxx-xxxx-xxxx
     phoneNumber: z.string().regex(phoneRegex, "올바른 전화번호 형식이 아닙니다.").optional(),
     birthdate: z.string().optional(), //  optional 뜻 프론트앤드에서 설명
-    gender: z.enum(Gender),
+    gender: z.enum(Gender, "성별은 필수값입니다. "),
 })
     .refine(data => data.password === data.passwordConfirm, {
         path: ["passwordConfirm"],

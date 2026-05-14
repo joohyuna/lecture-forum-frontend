@@ -9,7 +9,7 @@ export type ThemeContextType = {
     // VoidFunction 타입은 () => {} 형태를 나타내는 기본타입,
     // 결국 이 이야기는 , onChangeTheme 항목(프로퍼티)은 함수가 들어갈 수 있는데,
     // 그 함수는 매개변수가 없고, 리턴도 없는 함수가 들어간다는 뜻
-    onChangeTheme: VoidFunction;
+    onChangeTheme: VoidFunction; // 테마도 바꿔주는 기능도 선언
 };
 
 // 여기까지는 ContextAPI를 선언한게 아니가, 선언할 때 사용할 타입을 지정

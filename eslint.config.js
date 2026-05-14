@@ -18,5 +18,12 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+      rules: {
+        "@typescript-eslint/no-unused-vars": ["warn", {
+            "ignoreRestSiblings": true,  // ...rest (구조분해할당)에서 제외된 변수는 규칙에서 무시
+            "varsIgnorePattern": "^_",   // _로 시작하는 변수는 규칙에서 무시
+            "argsIgnorePattern": "^_",  // _로 시작하는 함수는 규칙에서 무시
+        }]
+      }
   },
 ])

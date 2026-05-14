@@ -4,8 +4,10 @@ import styled from "styled-components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../types/user.type.ts";
 import Button from "../../../components/common/button/Button.tsx";
+import { useNavigate } from "react-router";
 
 function SignUpPage() {
+    const navigate = useNavigate();
     // 회원가입 화면
 
     // input들을 react-hook-form으로 관리
@@ -23,17 +25,83 @@ function SignUpPage() {
     // pnpm install @hookform/resolvers
 
     // isSubmitting : handleSubmit을 통해 "전송" 중이라면 true, 아니라면 false 값
+    // setError : 에러 발생시, 해당 항목에 대한 에러메세지를 설정하는 메서드
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<SignUpInputType>({
         resolver: zodResolver(signUpSchema),
-        mode: "onBlur", // mode 언제 검증할 것인지 // input을 떠나면 검증할것읹지, 타이밍
+        mode: "onBlur", // mode 언제 검증할 것인지 // input을 떠나면 검증할것인지, 타이밍
         // 검색하고 빠져 나갈때 가 onBlur
     });
 
-    const onSubmit = () => {};
+    // errors
+    // 처음에는 errors = {} 형태롤 존재함
+    // 그러다가 각 항목에 에러가 발생이 되면 (검증이 실패하면) 그안에 key가 추가됨
+    // username의 검증에 실패하면 errors = {username: {message: "에러내용"}}; 형태가 됨
+    // errors는 각 항목에 대한 에러만 관리하는게 아니라 대표 errors항목인 "root"라는 항목도 있음
+
+    // 어디에다가도
+    const onSubmit = async (data: SignUpInputType) => {
+        try {
+            // 전송에 대한 내용을 기재하면 되는데, 그대로 데이터를 전달할 것인가?
+            // 프론튼엔드에서 '만' 필요한 passwordConfirm 항목이 추가되었음, 예 빼고 전송
+            // passwordConfirm 문법 오류 라는 뜻 실행에는 문제가 되지 않는다 ESLint 문법검사기가 잡은 에러
+            const { passwordConfirm, ...submitDate } = data;
+
+            // submitDate를 백엔드에게 전송 =>  fetch를 해준다? => 비동기 함수내 => async-await => try-catch로 묶어줌
+            // fetch(주소, 욥션); => 주소는 필수값, 옵션은 선택값
+            // 옵션 객체 {method, header, body}
+            // 백엔드가 성공으로 응답하면 response로 가며
+            // 실패되면 catch간다.
+
+            const response = await fetch("http://localhost:8080/user/create", {
+                // 전송을 했다 => 전송해서 응답을 받았다
+                // fetch는 응답만 오면 성공
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(submitDate), // 객체를 그대로 보낼 수 없고, JSON.string()를 통해 JSON형식의 string으로 변환
+            });
+
+            // response도 http메세지 내용이 기록되기 때문에 string을 JSON으로 파싱해야 함
+            const result = await response.json();
+
+            // 우리의 논리를 통해, "우리가 생각하는 " 성공인지를 판별
+            // response.ok  프로퍼티 안에 response 상태코드가 200번대라면 true, 아니라면 false
+            // throw 키워드는 예외를 발생시켜 catch로 내가 임의적으로 보내는 것
+            if (!result.ok) {
+                throw new Error(result.message || "회원가입 중 오류가 발생했습니다.");
+            }
+
+            // 백엔드에게 전송해서 성공
+            alert("회원가입이 완료되었습니다. 로그인을 진행해주세요");
+            navigate("/auth/signin");
+        } catch (error) {
+            if (error instanceof Error) {
+                const errorMessage = error.message;
+
+                if (errorMessage === "이미 사용 중인 아이디입니다.") {
+                    setError("username", { message: errorMessage });
+                } else if (errorMessage === "이미 가입된 이메일 입니다.") {
+                    setError("email", { message: errorMessage });
+                } else if (errorMessage === "이미 사용중인 닉네임입니다.") {
+                    setError("nickname", { message: errorMessage });
+                } else {
+                    setError("root", { message: errorMessage });
+                }
+            }
+
+            console.error(error);
+
+            // 백엔드에게 전송해서 실패
+            setError("root", { message: "회원가입에 실패했습니다. 다시 시도해주세요" });
+        }
+    };
+
     return (
         <AuthContainer>
             <FormCard onSubmit={handleSubmit(onSubmit)}>
