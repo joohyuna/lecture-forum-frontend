@@ -57,7 +57,7 @@ function SignUpPage() {
             // 백엔드가 성공으로 응답하면 response로 가며
             // 실패되면 catch간다.
 
-            const response = await fetch("http://localhost:8080/user/create", {
+            const response = await fetch("http://localhost:8000/user/create", {
                 // 전송을 했다 => 전송해서 응답을 받았다
                 // fetch는 응답만 오면 성공
                 method: "POST",
@@ -68,12 +68,14 @@ function SignUpPage() {
             });
 
             // response도 http메세지 내용이 기록되기 때문에 string을 JSON으로 파싱해야 함
+            // response = { ok: boolean, message: string }
+            // response.json()을 하게되면 백엔드에서 응답한 내용인 response.message를 JSON으로 파싱해야함
             const result = await response.json();
 
             // 우리의 논리를 통해, "우리가 생각하는 " 성공인지를 판별
             // response.ok  프로퍼티 안에 response 상태코드가 200번대라면 true, 아니라면 false
             // throw 키워드는 예외를 발생시켜 catch로 내가 임의적으로 보내는 것
-            if (!result.ok) {
+            if (!response.ok) {
                 throw new Error(result.message || "회원가입 중 오류가 발생했습니다.");
             }
 
