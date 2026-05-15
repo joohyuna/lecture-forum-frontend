@@ -2,8 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router";
 import { IoChatbubbles, IoMoon, IoSunny } from "react-icons/io5";
 import Button from "../common/button/Button.tsx";
-import { ThemeContext } from "../../contexts/theme/ThemeContext.ts";
-import { useContext } from "react";
+import { useThemeStore } from "../../stores/theme/themeStore.ts";
 
 const HeaderContainer = styled.header`
     position: sticky;
@@ -42,7 +41,7 @@ const NavGroup = styled.nav`
 
 
 function MainHeader() {
-    const {theme, onChangeTheme} = useContext(ThemeContext);
+    const {theme, onChangeTheme} = useThemeStore();
 
     // const navigate = useNavigate();
     return (

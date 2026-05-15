@@ -96,7 +96,7 @@ function SignInPage() {
                     fullWidth={true}
                     disabled={isSubmitting}
                     type={"submit"}>
-                    회원가입
+                    로그인
                 </Button>
             </AuthFormCard>
         </AuthContainer>
