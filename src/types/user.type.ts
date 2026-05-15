@@ -21,7 +21,7 @@ export const Gender = {
 
 // 그에 대한 타입을 만든것임
 export type GenderType  = typeof Gender[keyof typeof Gender];
-// typeof 키워드 : 해당 변수의 타입을 반환
+// typeof 키워드 : 해당 변수의 타입을 반환 JavaScript에서 사용하는 키워드이기 때문에 원시타입과 그리고 object타입이로 나온다.
 // keyof 키워드 : 해당 캑체의 키를 반환
 
 

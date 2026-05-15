@@ -1,20 +1,29 @@
 import { type SignUpInputType, signUpSchema } from "../../../schemas/auth/signUpSchema.ts";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../types/user.type.ts";
 import Button from "../../../components/common/button/Button.tsx";
 import { useNavigate } from "react-router";
 import axiosInstance from "../../../api/axiosInstance.ts";
 import * as axios from "axios";
+import {
+    AuthContainer,
+    AuthFormBox,
+    AuthFormCard,
+    AuthRootErrorMessage,
+    AuthSubTitle,
+    AuthTitle,
+} from "../../../components/auth/auth.style.tsx";
+import InputGroup from "../../../components/common/input/InputGroup.tsx";
+import SelectGroup from "../../../components/common/select/SelectGroup.tsx";
 
 function SignUpPage() {
     const navigate = useNavigate();
-    // 회원가입 화면
+    // 1. 회원가입 화면
 
-    // input들을 react-hook-form으로 관리
-    // 사용자가 입력한 값들을 백엔드로 보내기 전, 검증 절차 중요  => zod
-    // 화면 작성
+    // 2. input들을 react-hook-form으로 관리
+    // 3. 사용자가 입력한 값들을 백엔드로 보내기 전, 검증 절차 중요  => zod
+    // 4. 화면 작성
 
     // react-hook-form만 이용한다면, 사용자가 입력하는 값에 대한 검증 내용을
     // input {...register(input이름, {옵션})}
@@ -51,6 +60,8 @@ function SignUpPage() {
             // 전송에 대한 내용을 기재하면 되는데, 그대로 데이터를 전달할 것인가?
             // 프론튼엔드에서 '만' 필요한 passwordConfirm 항목이 추가되었음, 예 빼고 전송
             // passwordConfirm 문법 오류 라는 뜻 실행에는 문제가 되지 않는다 ESLint 문법검사기가 잡은 에러
+            // 구조분해할당 내가 필요한 것만 사용하면 되니깐
+            // 선언에서 스프레드 문법은 나머지 전부 ...
             const { passwordConfirm, ...submitDate } = data;
 
             // 200번때 일때만 성공 진짜 성공에 대한 내용만 남는다.
@@ -79,128 +90,93 @@ function SignUpPage() {
                 errorMessage = error.message;
             }
 
-            setError("root", {message: errorMessage});
+            setError("root", { message: errorMessage });
         }
     };
 
     return (
         <AuthContainer>
-            <FormCard onSubmit={handleSubmit(onSubmit)}>
-                <Title>회원가입</Title>
-                <SubTitle>토론대난투에 오신것을 환영합니다.</SubTitle>
-                <FormBox>
-                    <InputGroup>
-                        <Label htmlFor={"username"}>아이디</Label>
-                        <Input
-                            {...register("username")}
-                            $hasError={!!errors.username} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"username"}
-                            placeholder={"4자이상 필요"}
-                        />
-                        {errors.username && <ErrorMessage>{errors.username.message}</ErrorMessage>}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"password"}>비밀번호</Label>
-                        <Input
-                            {...register("password")}
-                            $hasError={!!errors.password} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"password"}
-                            placeholder={"6자이상 필요"}
-                            type={"password"}
-                        />
-                        {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"password"}>비밀번호 확인</Label>
-                        <Input
-                            {...register("passwordConfirm")}
-                            $hasError={!!errors.passwordConfirm} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"passwordConfirm"}
-                            placeholder={"비밀번호를 한 번 더 입력해주세요"}
-                            type={"password"}
-                        />
-                        {errors.passwordConfirm && (
-                            <ErrorMessage>{errors.passwordConfirm.message}</ErrorMessage>
-                        )}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"name"}>이름</Label>
-                        <Input
-                            {...register("name")}
-                            $hasError={!!errors.name} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"name"}
-                        />
-                        {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"nickname"}>닉네임</Label>
-                        <Input
-                            {...register("nickname")}
-                            $hasError={!!errors.nickname} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"nickname"}
-                            placeholder={"닉네임은 2자 이상 입력해주세요 "}
-                        />
-                        {errors.nickname && <ErrorMessage>{errors.nickname.message}</ErrorMessage>}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"email"}>이메일</Label>
-                        <Input
-                            {...register("email")}
-                            $hasError={!!errors.email} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"email"}
-                            type={"email"}
-                        />
-                        {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"phoneNumber"}>전화번호</Label>
-                        <Input
-                            {...register("phoneNumber")}
-                            $hasError={!!errors.phoneNumber} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"phoneNumber"}
-                            type={"tel"}
-                        />
-                        {errors.phoneNumber && (
-                            <ErrorMessage>{errors.phoneNumber.message}</ErrorMessage>
-                        )}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"birthdate"}>생년월일</Label>
-                        {/* type="date"를 통해 입력을 받더라도, 전송하는 내용은 "xxxx-xx-xx" 형태의 string이 전송됨 */}
-                        <Input
-                            {...register("birthdate")}
-                            $hasError={!!errors.birthdate} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"birthdate"}
-                            type={"date"}
-                        />
-                        {errors.birthdate && (
-                            <ErrorMessage>{errors.birthdate.message}</ErrorMessage>
-                        )}
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor={"gender"}>성별</Label>
-                        <Select
-                            {...register("gender")}
-                            $hasError={!!errors.gender} // !를 붙인다는건, 어떤한 값이든 있으면 false 없으면 true, 반대로 boolean으로 형변환된다.
-                            // !!를 붙인다면, 어떠한 값이든 있으면 true 없으면 false, boolean으로 형변환
-                            id={"gender"}>
-                            <option value={""}>성별을 선택해주세요</option>
-                            <option value={Gender.MALE}>남성</option>
-                            <option value={Gender.FEMALE}>여성</option>
-                        </Select>
-                        {errors.gender && <ErrorMessage>{errors.gender.message}</ErrorMessage>}
-                    </InputGroup>
-                </FormBox>
+            <AuthFormCard onSubmit={handleSubmit(onSubmit)}>
+                <AuthTitle>회원가입</AuthTitle>
+                <AuthSubTitle>토론대난투에 오신것을 환영합니다.</AuthSubTitle>
+                <AuthFormBox>
+                    <InputGroup
+                        label={"아이디"}
+                        id={"username"}
+                        errorMessage={errors.username?.message}
+                        registerObj={register("username")}
+                        placeholder={"4자이상 필요"}
+                    />
 
-                {errors.root && <RootErrorMessage>{errors.root.message}</RootErrorMessage>}
+                    <InputGroup
+                        label={"비밀번호"}
+                        id={"password"}
+                        errorMessage={errors.password?.message}
+                        registerObj={register("password")}
+                        placeholder={"6자이상 필요"}
+                        type={"password"}
+                    />
+
+                    <InputGroup
+                        label={"비밀번호 확인"}
+                        id={"passwordConfirm"}
+                        errorMessage={errors.passwordConfirm?.message}
+                        registerObj={register("passwordConfirm")}
+                        placeholder={"비밀번호를 한번더 입력해주세요"}
+                        type={"password"}
+                    />
+
+                    <InputGroup
+                        label={"이름"}
+                        id={"name"}
+                        errorMessage={errors.name?.message}
+                        registerObj={register("name")}
+                    />
+
+                    <InputGroup
+                        label={"닉네임"}
+                        id={"nickname"}
+                        errorMessage={errors.nickname?.message}
+                        registerObj={register("nickname")}
+                        placeholder={"닉네임을 2자이상 입력해주세요"}
+                    />
+
+                    <InputGroup
+                        label={"이메일"}
+                        id={"email"}
+                        errorMessage={errors.email?.message}
+                        registerObj={register("email")}
+                        type={"email"}
+                    />
+
+                    <InputGroup
+                        label={"전화번호"}
+                        id={"phoneNumber"}
+                        errorMessage={errors.phoneNumber?.message}
+                        registerObj={register("phoneNumber")}
+                        type={"tel"}
+                    />
+
+                    <InputGroup
+                        label={"생년월일"}
+                        id={"birthdate"}
+                        errorMessage={errors.birthdate?.message}
+                        registerObj={register("birthdate")}
+                        type={"date"}
+                    />
+
+                    <SelectGroup
+                        label={"성별"}
+                        id={"gender"}
+                        errorMessage={errors.gender?.message}
+                        registerObj={register("gender")}>
+                        <option value={""}>성별을 선택해주세요</option>
+                        <option value={Gender.MALE}>남성</option>
+                        <option value={Gender.FEMALE}>여성</option>
+                    </SelectGroup>
+                </AuthFormBox>
+
+                {errors.root && <AuthRootErrorMessage>{errors.root.message}</AuthRootErrorMessage>}
 
                 <Button
                     color={"primary"}
@@ -210,110 +186,9 @@ function SignUpPage() {
                     type={"submit"}>
                     회원가입
                 </Button>
-            </FormCard>
+            </AuthFormCard>
         </AuthContainer>
     );
 }
 
 export default SignUpPage;
-
-const AuthContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const FormCard = styled.form`
-    width: 100%;
-    max-width: 480px;
-    padding: 40px 20px;
-    background-color: ${props => props.theme.colors.background.paper};
-    border-radius: 16px;
-    border: 1px solid ${props => props.theme.colors.divider};
-`;
-
-const Title = styled.h1`
-    font-size: 28px;
-    font-weight: 800;
-    color: ${props => props.theme.colors.primary};
-    margin-bottom: 8px;
-    text-align: center;
-`;
-
-const SubTitle = styled.h6`
-    font-size: 15px;
-    color: ${props => props.theme.colors.text.disabled};
-    text-align: center;
-    margin-bottom: 32px;
-`;
-
-const FormBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 50px;
-`;
-
-const InputGroup = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-`;
-
-const Label = styled.label`
-    font-size: 14px;
-    font-weight: 800;
-    color: ${props => props.theme.colors.text.default};
-`;
-
-const Input = styled.input<{ $hasError?: boolean }>`
-    width: 100%;
-    padding: 12px 16px;
-    background-color: ${props => props.theme.colors.background.default};
-    border: 1px solid
-        ${props => (props.$hasError ? props.theme.colors.error : props.theme.colors.divider)};
-    border-radius: 8px;
-    font-size: 15px;
-    color: ${props => props.theme.colors.text.default};
-    transition: all 0.5s;
-    &::placeholder {
-        color: ${props => props.theme.colors.text.disabled};
-    }
-    &:focus {
-        border-color: ${props =>
-            props.$hasError ? props.theme.colors.error : props.theme.colors.primary};
-    }
-`;
-
-const ErrorMessage = styled.span`
-    font-size: 15px;
-    color: ${props => props.theme.colors.error};
-    font-weight: 500;
-`;
-
-const Select = styled.select<{ $hasError?: boolean }>`
-    width: 100%;
-    padding: 12px 16px;
-    background-color: ${props => props.theme.colors.background.default};
-    border: 1px solid
-        ${props => (props.$hasError ? props.theme.colors.error : props.theme.colors.divider)};
-    border-radius: 8px;
-    font-size: 15px;
-    color: ${props => props.theme.colors.text.default};
-    transition: all 0.5s;
-    &::placeholder {
-        color: ${props => props.theme.colors.text.disabled};
-    }
-    &:focus {
-        border-color: ${props =>
-            props.$hasError ? props.theme.colors.error : props.theme.colors.primary};
-    }
-`;
-
-const RootErrorMessage = styled.p`
-    font-size: 14px;
-    text-align: center;
-    color: ${props => props.theme.colors.error};
-    font-weight: 500;
-    margin-bottom: 50px;
-`;
