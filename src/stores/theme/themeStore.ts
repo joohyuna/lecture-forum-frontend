@@ -1,12 +1,13 @@
-import { create } from "zustand";
+import { create } from "zustand";   // 쥬스탄드에서 불러올때 create 확인
 import { persist } from "zustand/middleware";
 
 export type ThemeType = "light" | "dark";
 
 type ThemeState = {
     theme: ThemeType;
-    onChangeTheme: VoidFunction;
+    onChangeTheme: VoidFunction;  // () => void
 };
+
 
 export const useThemeStore = create<ThemeState>()(
     // persist는 이렇게 마련한 store와 localStorage를 연결하는 미들웨어

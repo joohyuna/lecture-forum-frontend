@@ -32,3 +32,20 @@ export const Role = {
 }
 
 export type RoleType  = typeof Role[keyof typeof Role];
+
+
+// 프론트엔드는 Prisma가 없어서 내가 직접 만들어 준다
+// 백엔드는 이작업을 Prisma 가 자동으로 해준다
+export interface User {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    username: string;
+    name: string;
+    nickname: string;
+    email: string;
+    phoneNumber: string | null;  // 옵션값이라 값이 않올수 있다
+    birthdate: Date | null;
+    gender: GenderType;
+    role: RoleType;
+}

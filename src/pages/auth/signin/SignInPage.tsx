@@ -14,12 +14,15 @@ import {
     AuthTitle,
 } from "../../../components/auth/auth.style.tsx";
 import InputGroup from "../../../components/common/input/InputGroup.tsx";
+import { useAuthStore } from "../../../stores/auth/authStore.ts";
 
 
 
 
 function SignInPage() {
     const navigate = useNavigate();
+    const { login } = useAuthStore();
+
     const {
         register,
         handleSubmit,
@@ -39,10 +42,8 @@ function SignInPage() {
             // user 정보와 token을 불러와야함
             // data가 2개인 내용은 response.data 리스폰스
             const { user, token } = response.data.data;
-            // 신분븡 발급은 login이라는 행위를 할때에만 발급이됨
-            // 그렇기 때문에 이 token을 어딘가(ContextAPI등 , localStorage)에 저장해서
-            // 사용자가 백엔드에 요청을 할 때 마다 꺼내서 집어넣고 요청을 해야함
-            localStorage.setItem("accessToken", token);
+            login(user, token);
+
 
             alert("로그인에 성공했습니다!");
             navigate("/");
