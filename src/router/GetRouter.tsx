@@ -36,6 +36,14 @@ const adminLoader = () => {
     return null;
 }
 
+const guestLoader = () => {
+    const {isLoggedIn} = useAuthStore.getState();
+
+    if (isLoggedIn) {
+        return redirect("/");
+    }
+}
+
 
 
 const router = createBrowserRouter([
@@ -46,6 +54,7 @@ const router = createBrowserRouter([
             { index: true, element: <HomePage /> },
             {
                 path: "auth",
+                loader: guestLoader,
                 children: [
                     { path: "signin", element: <SignInPage /> },
                     { path: "signup", element: <SignUpPage /> },
