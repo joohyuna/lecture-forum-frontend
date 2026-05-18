@@ -15,13 +15,18 @@ type AuthState = {
     logout: VoidFunction; // token과 user의 항목의 값을 비우고, isLoggedIn을 false로 바꾸는 일
 };
 
-export const useAuthStore = create<AuthState>()(persist(set => ({
-    isLoggedIn: false,
-    token: null,
-    user: null,
-    login: (user, token) => set({isLoggedIn: true, token, user}),
-    logout: () => set({isLoggedIn: false, token: null, user: null}),
-}), {name: "auth-storage"}));
+export const useAuthStore = create<AuthState>()(
+    persist(
+        set => ({
+            isLoggedIn: false,
+            token: null,
+            user: null,
+            login: (user, token) => set({ isLoggedIn: true, token, user }),
+            logout: () => set({ isLoggedIn: false, token: null, user: null }),
+        }),
+        { name: "auth-storage" },
+    ),
+);
 
 // 원래 객체의 값을 바꿔준다고 했을때, 나머지 항목들도 값을 유지하려면 값을 적어줘야 하는데
 // zustand의 set 명렁어는 적어주지 않은 프로퍼니(항목)의 값을 안 적어줘도 유지함

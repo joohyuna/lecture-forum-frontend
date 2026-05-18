@@ -16,9 +16,6 @@ import {
 import InputGroup from "../../../components/common/input/InputGroup.tsx";
 import { useAuthStore } from "../../../stores/auth/authStore.ts";
 
-
-
-
 function SignInPage() {
     const navigate = useNavigate();
     const { login } = useAuthStore();
@@ -43,7 +40,6 @@ function SignInPage() {
             // data가 2개인 내용은 response.data 리스폰스
             const { user, token } = response.data.data;
             login(user, token);
-
 
             alert("로그인에 성공했습니다!");
             navigate("/");
@@ -105,5 +101,3 @@ function SignInPage() {
 }
 
 export default SignInPage;
-
-
