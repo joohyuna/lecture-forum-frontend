@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import adminCategoryAPi from "../../../api/admin/adminCategoryAPi.ts";
 import type { Category } from "../../../types/category.type.ts";
-import styled from "styled-components";
 import { Link } from "react-router";
 import Button from "../../../components/common/button/Button.tsx";
 import Card from "../../../components/common/card/Card.tsx";
+import {
+    AdminContainer,
+    AdminLoadingText,
+    AdminPageHeader,
+    AdminTable,
+    AdminTableWrapper,
+    AdminTd,
+    AdminTh,
+    AdminTitle,
+} from "../../../components/admin/admin.style.tsx";
 
 function AdminCategoryListPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -87,57 +96,3 @@ function AdminCategoryListPage() {
 
 export default AdminCategoryListPage;
 
-const AdminContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-`;
-
-const AdminPageHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-`;
-
-const AdminTitle = styled.h2`
-    font-size: 24px;
-    font-weight: 700;
-`;
-
-const AdminLoadingText = styled.div`
-    text-align: center;
-    padding: 40px;
-    color: ${props => props.theme.colors.text.disabled};
-`;
-
-// PC에서는 상관 없는데, 모바일 때문에 한번
-const AdminTableWrapper = styled.div`
-    overflow-x: auto;
-`;
-
-const AdminTable = styled.table`
-    width: 100%;
-    border-collapse: collapse;
-`;
-
-const AdminTh = styled.th<{ $width?: string }>`
-    width: ${props => props.$width};
-    text-align: left;
-    padding: 12px 16px;
-    background-color: ${props => props.theme.colors.background.default};
-    color: ${props => props.theme.colors.text.disabled};
-    font-size: 13px;
-    font-weight: 600;
-    border-bottom: 2px solid ${props => props.theme.colors.divider};
-`;
-
-const AdminTd = styled.td`
-    // td는 flex를 쓸수 없음
-    // 그안에 들어가는 요소는 대한 정렬은  text-align, vertical-align를 통해서 해야함
-    padding: 16px;
-    font-size: 14px;
-    border-bottom: 1px solid ${props => props.theme.colors.divider};
-    vertical-align: middle;
-`;
