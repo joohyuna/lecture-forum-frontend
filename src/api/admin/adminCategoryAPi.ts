@@ -10,13 +10,21 @@ const fetchCategoryList = async (): Promise<Category[]> => {
 // 카테고리 등록 API
 const createCategory = async (data: AdminCreateCategoryInputType): Promise<Category> => {
     const response = await axiosInstance.post("/admin/category/create", data);
-    return response.data.data;
+    return response.data.data; // 업데이트 한 후의 카테고리 정보
 }
 
 // 카테고리 수정 API
 
 
+// 카테고리온오프 API
+const toggleCategoryStatus = async (id:number) => {
+    const response = await axiosInstance.patch(`/admin/category/${id}/status`);
+    return response.data.data;
+    }
+
+
 export default {
     fetchCategoryList,
     createCategory,
+    toggleCategoryStatus,
 };
