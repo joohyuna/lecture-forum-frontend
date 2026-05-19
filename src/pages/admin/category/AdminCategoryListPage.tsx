@@ -129,7 +129,8 @@ const AdminTh = styled.th<{ $width?: string }>`
     background-color: ${props => props.theme.colors.background.default};
     color: ${props => props.theme.colors.text.disabled};
     font-size: 13px;
-    border-bottom: 1px solid ${props => props.theme.colors.divider};
+    font-weight: 600;
+    border-bottom: 2px solid ${props => props.theme.colors.divider};
 `;
 
 const AdminTd = styled.td`
