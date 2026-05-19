@@ -24,7 +24,7 @@ const adminLoader = () => {
 
     if (!isLoggedIn) {
         alert("로그인이 필요합니다.");
-        // redirect()는, 마찬기지로 컴포넌트가 아닌 속에서 사용자를 이동시키는 메서드
+        // redirect()는, 마찬기지로 컴포넌트가 아닌 곳에서 사용자를 이동시키는 메서드
         // 이전에 사용했던 navigate()는 컴포넌트에서 사용자를 이동시키는 메서드
         return redirect("/auth/signin");
     }

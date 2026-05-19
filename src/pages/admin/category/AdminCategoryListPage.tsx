@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import adminCategoryAPi from "../../../api/admin/adminCategoryAPi.ts";
-import type {Category} from "../../../types/category.type.ts";
+import type { Category } from "../../../types/category.type.ts";
+import styled from "styled-components";
+import { Link } from "react-router";
+import Button from "../../../components/common/button/Button.tsx";
+import Card from "../../../components/common/card/Card.tsx";
 
 function AdminCategoryListPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // useEffect 안에서 비동기 함수를 async-await방법으로 사용할거라면
+        // 함수를 만들어서 감싸주고, 그걸 실행하동곡 문법에 맞춰서 적용
+        // 그리고 그 함수 실행역시 비동기 함수에 대한 실행이기 때문에
+        // then(() => {}) 아무것도 안하는 then을 붙여줌
         const loadCategories = async () => {
             try {
                 const data = await adminCategoryAPi.fetchCategoryList();
@@ -18,10 +26,117 @@ function AdminCategoryListPage() {
                 setIsLoading(false);
             }
         };
+        // 다음단계에 아무것도 안하겠다
+        // 비동기 함수 에는 반드시 then 이것은 문법을 지키기 위해서
         loadCategories().then(() => {});
     }, []);
 
-    return <>abcdef</>;
+    return (
+        <AdminContainer>
+            <AdminPageHeader>
+                <AdminTitle>카테고리 관리</AdminTitle>
+                <Button
+                    color={"primary"}
+                    variant={"contained"}
+                    as={Link}
+                    to={"/admin/category/create"}>
+                    + 카테고리 추가
+                </Button>
+            </AdminPageHeader>
+
+            <Card>
+                {isLoading ? (
+                    <AdminLoadingText>불러오는 중...</AdminLoadingText>
+                ) : (
+                    <AdminTableWrapper>
+                        <AdminTable>
+                            <thead>
+                                <tr>
+                                    <AdminTh $width={"10%"}>ID</AdminTh>
+                                    <AdminTh $width={"65%"}>카테고리명</AdminTh>
+                                    <AdminTh $width={"15%"}>상태</AdminTh>
+                                    <AdminTh $width={"15%"}>관리</AdminTh>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {categories.length === 0 && (
+                                    <tr>
+                                        <AdminTd
+                                            colSpan={4}
+                                            style={{ textAlign: "center", padding: "100px" }}>
+                                            등록된 카테고리가 없습니다.
+                                        </AdminTd>
+                                    </tr>
+                                )}
+                                {categories.map(item => (
+                                    <tr key={item.id}>
+                                        <AdminTd>{item.id}</AdminTd>
+                                        <AdminTd>{item.name}</AdminTd>
+                                        <AdminTd>{item.status}</AdminTd>
+                                        <AdminTd>기능</AdminTd>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </AdminTable>
+                    </AdminTableWrapper>
+                )}
+            </Card>
+        </AdminContainer>
+    );
 }
 
 export default AdminCategoryListPage;
+
+const AdminContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+`;
+
+const AdminPageHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const AdminTitle = styled.h2`
+    font-size: 24px;
+    font-weight: 700;
+`;
+
+const AdminLoadingText = styled.div`
+    text-align: center;
+    padding: 40px;
+    color: ${props => props.theme.colors.text.disabled};
+`;
+
+// PC에서는 상관 없는데, 모바일 때문에 한번
+const AdminTableWrapper = styled.div`
+    overflow-x: auto;
+`;
+
+const AdminTable = styled.table`
+    width: 100%;
+    border-collapse: collapse;
+`;
+
+const AdminTh = styled.th<{ $width?: string }>`
+    width: ${props => props.$width};
+    text-align: left;
+    padding: 12px 16px;
+    background-color: ${props => props.theme.colors.background.default};
+    color: ${props => props.theme.colors.text.disabled};
+    font-size: 13px;
+    border-bottom: 1px solid ${props => props.theme.colors.divider};
+`;
+
+const AdminTd = styled.td`
+    // td는 flex를 쓸수 없음
+    // 그안에 들어가는 요소는 대한 정렬은  text-align, vertical-align를 통해서 해야함
+    padding: 16px;
+    font-size: 14px;
+    border-bottom: 1px solid ${props => props.theme.colors.divider};
+    vertical-align: middle;
+`;

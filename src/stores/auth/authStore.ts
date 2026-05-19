@@ -11,12 +11,15 @@ type AuthState = {
     user: User | null;
 
     // 저장된 값을 바꿀 수 있도록 외부에서 사용하게 하는 기능 프로퍼티
+    // 글자가 아니라 위치 글자는 내가 알아보기 위해서 사용하는 것이다.
     login: (user: User, token: string) => void;  // token과 user의 항목의 값을 저장하고, isLoggedIn을 true로 바꾸는 일
     logout: VoidFunction; // token과 user의 항목의 값을 비우고, isLoggedIn을 false로 바꾸는 일
 };
 
+// 실제 작업 // 값만 바꿔주고 끝낼꺼야
 export const useAuthStore = create<AuthState>()(
     persist(
+        // persist 로 자동 localStorage 에 저장
         set => ({
             isLoggedIn: false,
             token: null,
