@@ -17,7 +17,7 @@ const createCategory = async (data: AdminCreateCategoryInputType): Promise<Categ
 
 
 // 카테고리온오프 API
-const toggleCategoryStatus = async (id:number) => {
+const toggleCategoryStatus = async (id: number) => {
     const response = await axiosInstance.patch(`/admin/category/${id}/status`);
     return response.data.data;
     }
