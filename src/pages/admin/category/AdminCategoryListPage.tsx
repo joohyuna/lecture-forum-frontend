@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import Button from "../../../components/common/button/Button.tsx";
 import Card from "../../../components/common/card/Card.tsx";
 import {
+    AdminButtonGroup,
     AdminContainer,
     AdminLoadingText,
     AdminPageHeader,
@@ -15,7 +16,7 @@ import {
     AdminTitle,
 } from "../../../components/admin/admin.style.tsx";
 import Badge from "../../../components/common/badge/Badge.tsx";
-import { FiRefreshCcw, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiRefreshCcw, FiTrash2 } from "react-icons/fi";
 
 function AdminCategoryListPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -74,7 +75,7 @@ function AdminCategoryListPage() {
             // 내가 현재 갖고 있는 목록이 저장된 categories 중,
             // 변경 작업이 이루어진 id가 동일한 항목에 대해서만 result를 가지고 status를 바꿔주겠다
             setCategories(prev =>
-               prev.map(item => (item.id === id ? { ...item, status: result.status } : item)),
+                prev.map(item => (item.id === id ? { ...item, status: result.status } : item)),
             );
 
             // 1. categories는 state다. => 그렇기 때문에 값을 바꾸려면 setCategories를 통 할수 밖에 없다.
@@ -85,7 +86,7 @@ function AdminCategoryListPage() {
             // setCategories(prev => {return prev.map()})
             // setCategories(prev => {return [{...}, {...}])
             // setCategories([{....}, {....}])
-            // 3-2. .map()이가는 명령은 요소의 갯수가 같은 array가 반환
+            // 3-2. .map()이라는 명령은 요소의 갯수가 같은 array가 반환
 
             // 4. 지금 현재 값인 Array 요소들 중, 내가 하려고 하는것 현재 요소중 id가 토글된 녀석의 값만
             // setCategories(prev => {
@@ -95,8 +96,8 @@ function AdminCategoryListPage() {
             // })
 
             // setCategories (prev => {return prev.map(item => item.id === id ? {...item, status: result.status}: item);})
-            // 이 코그을 작성할 때 기업해야 하는것
-            // 백엔드가 뱉어준 "바뀐" Category의 전보는 result라는 변수가 갖고 있다
+            // 이 코드을 작성할 때 기억해야 하는것
+            // 백엔드가 뱉어준 "바뀐" Category의 정보는 result라는 변수가 갖고 있다
             // 그리고 "내가 변경해야 하는 그 Category의 id 정보"는 id라는 변수가 갖고 있다
         } catch (error) {
             console.log(error);
@@ -158,16 +159,27 @@ function AdminCategoryListPage() {
                                             </Badge>
                                         </AdminTd>
                                         <AdminTd>
-                                            <Button
-                                                color={"primary"}
-                                                variant={"icon"}
-                                                onClick={() => handleToggleCategoryStatus(item.id)}>
-                                                {item.status === CategoryStatus.ACTIVE ? (
-                                                    <FiTrash2 size={18} />
-                                                ) : (
-                                                    <FiRefreshCcw size={18} />
-                                                )}
-                                            </Button>
+                                            <AdminButtonGroup $align={"left"}>
+                                                <Button
+                                                    color={"primary"}
+                                                    variant={"icon"}
+                                                    as={Link}
+                                                    to={`/admin/category/edit/${item.id}`}>
+                                                    <FiEdit />
+                                                </Button>
+                                                <Button
+                                                    color={"primary"}
+                                                    variant={"icon"}
+                                                    onClick={() =>
+                                                        handleToggleCategoryStatus(item.id)
+                                                    }>
+                                                    {item.status === CategoryStatus.ACTIVE ? (
+                                                        <FiTrash2 size={18} />
+                                                    ) : (
+                                                        <FiRefreshCcw size={18} />
+                                                    )}
+                                                </Button>
+                                            </AdminButtonGroup>
                                         </AdminTd>
                                     </tr>
                                 ))}
