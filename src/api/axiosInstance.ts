@@ -17,8 +17,9 @@ export default api;
 // api.interceptors.request.use() 메서드에 해당 내용을 매개변수에 함수로서 작성
 // 내가 무슨질을 할지 직전에 함수
 // 그렇게 집어 넣는 함수의 매개변수 첫 자리에는 Request를 보낼 때의 설정 정보가 들어옴
-api.interceptors.request.use((config) => {
-    // 울기ㅏ 프로론트에서 갖고 있는 토큰정보를 가지고서
+// config에 모든 정보가 들어있음
+api.interceptors.request.use(config => {
+    // 우리가 프로론트에서 갖고 있는 토큰정보를 가지고서
     // Request의 HTTP 메세지 헤더에 넣어줘야 함
     // 신분증(token)을 발급하는 주체: 백엔드
     // 신분증(token) 발급 타이이밍: 로그인 할 때

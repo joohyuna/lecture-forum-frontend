@@ -38,8 +38,9 @@ export type RoleType  = typeof Role[keyof typeof Role];
 // 백엔드는 이작업을 Prisma 가 자동으로 해준다
 export interface User {
     id: number;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
     username: string;
     name: string;
     nickname: string;
