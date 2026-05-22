@@ -1,7 +1,10 @@
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { adminCreateUserSchema } from "../../../../schemas/admin/user/adminCreateUserSchema.ts";
+import {
+    type AdminCreateUserInputType,
+    adminCreateUserSchema,
+} from "../../../../schemas/admin/user/adminCreateUserSchema.ts";
 import {
     AdminButtonGroup,
     AdminContainer,
@@ -14,7 +17,6 @@ import InputGroup from "../../../../components/common/input/InputGroup.tsx";
 import SelectGroup from "../../../../components/common/select/SelectGroup.tsx";
 import { Gender, Role } from "../../../../types/user.type.ts";
 import Button from "../../../../components/common/button/Button.tsx";
-import type { AdminCreateCategoryInputType } from "../../../../schemas/admin/category/adminCreateCategorySchema.ts";
 import adminUserApi from "../../../../api/admin/user/adminUserApi.ts";
 import * as axios from "axios";
 import { AuthRootErrorMessage } from "../../../../components/auth/auth.style.tsx";
@@ -33,7 +35,7 @@ function AdminUserCreatePage() {
         mode: "onBlur",
     });
 
-    const onSubmit = async (data: AdminCreateCategoryInputType) => {
+    const onSubmit = async (data: AdminCreateUserInputType) => {
         try {
             await adminUserApi.createUser(data);
             alert("사용자 생성이 완료되었습니다.");
