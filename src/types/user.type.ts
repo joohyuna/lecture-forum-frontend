@@ -46,7 +46,7 @@ export interface User {
     nickname: string;
     email: string;
     phoneNumber: string | null;  // 옵션값이라 값이 않올수 있다
-    birthdate: Date | null;
+    birthdate: string | null;
     gender: GenderType;
     role: RoleType;
 }

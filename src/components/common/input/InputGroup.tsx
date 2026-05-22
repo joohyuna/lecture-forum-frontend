@@ -9,6 +9,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     id?: string;
     errorMessage?: string;
     registerObj?: UseFormRegisterReturn;
+    wrap?: boolean;
 }
 
 
@@ -27,9 +28,9 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 // rester()싫행한 결과 객체의 타입을 UseFormRegisterReturn
 // ...props 선언
 // 하단은 ... 값 props
-function InputGroup({label, id, errorMessage, registerObj, ...props}: Props) {
+function InputGroup({label, id, errorMessage, registerObj, wrap, ...props}: Props) {
     return (
-        <StyledInputGroup>
+        <StyledInputGroup $wrap={wrap}>
             {label && <Label htmlFor={id}>{label}</Label>}
             <Input id={id} $hasError={!!errorMessage} {...registerObj} {...props} />
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}

@@ -8,19 +8,22 @@ interface Props extends SelectHTMLAttributes<HTMLSelectElement> {
     id?: string;
     errorMessage?: string;
     registerObj?: UseFormRegisterReturn;
-    children: ReactNode;  // ReactNode 타입은 React 의 화면 요소를 나타닐 수 있는 대표타입
+    children: ReactNode; // ReactNode 타입은 React 의 화면 요소를 나타닐 수 있는 대표타입
+    wrap?: boolean;
 }
 
 
-function SelectGroup({label, id, errorMessage, registerObj, children, ...props}: Props) {
+function SelectGroup({label, id, errorMessage, registerObj, children, wrap, ...props}: Props) {
 
-    return <StyledInputGroup>
-        {label && <Label htmlFor={id}>{label}</Label>}
-        <Select id={id}  $hasError={!!errorMessage} {...registerObj} {...props}>
-            {children}
-        </Select>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-    </StyledInputGroup>
+    return (
+        <StyledInputGroup $wrap={wrap}>
+            {label && <Label htmlFor={id}>{label}</Label>}
+            <Select id={id} $hasError={!!errorMessage} {...registerObj} {...props}>
+                {children}
+            </Select>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        </StyledInputGroup>
+    );
 }
 
 
