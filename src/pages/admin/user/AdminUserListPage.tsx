@@ -22,10 +22,16 @@ function AdminUserListPage() {
     const [list, setList] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const loadUsers = async () => {
+    const SIZE = 20; // 고정값
+    const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(0);
+    const totalPage = Math.ceil(total / SIZE); // Math.ceil() : 올림 메서드
+
+    const loadUsers = async (page:number) => {
         try {
-            const data = await adminUserApi.fetchUserList();
-            setList(data);
+            const data = await adminUserApi.fetchUserList(page, SIZE);
+            setList(data.list);
+            setTotal(data.total);
         } catch (error) {
             console.log(error);
             alert("사용자 목록을 불러오는데 실패했습니다.");
@@ -33,6 +39,12 @@ function AdminUserListPage() {
             setIsLoading(false);
         }
     };
+
+    // useEffect는 초기 렌더링이 끝난 즉시 1번 무조건 실행
+    // 이 화면에서는 page가 바뀔때 목록 갱신 함수가 실행되어야 함 => useEffect의 의존성이 하는 일
+    // useEffect는 useEffect(함수, 의존성 배열);
+    // useEffect(() => {}, [요기가 의존성 배열]);
+    // 의존성 배열에 넣은 변수나 함수나 메서드나 state가 바뀔때 재 실행됨
 
     useEffect(() => {
         // 이 함수는, 백엔드에게 내용을 받아서 state에 저장 => 화면 출력을 해주는 함수를 useEffect 매개 변수 안에 작성해서
@@ -42,8 +54,8 @@ function AdminUserListPage() {
 
         // 문법 오류
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        loadUsers().then(() => {});
-    }, []);
+        loadUsers(page).then(() => {});
+    }, [page]);
 
     const handleDelete = async (id: number) => {
         // confirm은 사용자에게 경고차을 통해 확인을 받는 메서드, true/false가 반환됨
@@ -65,12 +77,16 @@ function AdminUserListPage() {
             // 1번으로 진행을 하려면 => 이미 우리가 작성한 내용이 있음
             // 1-1 백엔드에게 다시 데이터 요청
             // 1-2. 받아온 정보를 목록을 관리하는 status에 덮어쓰기
-            loadUsers().then(() => {});
+            loadUsers(page).then(() => {});
         } catch (error) {
             console.log(error);
             alert("사용자 삭제 중 오류가 발생했습니다.");
         }
-    }
+    };
+
+    const handlePageChange = (page: number) => {
+        setPage(page);
+    };
 
     return (
         <AdminContainer>
@@ -156,6 +172,31 @@ function AdminUserListPage() {
                             </tbody>
                         </AdminTable>
                     </AdminTableWrapper>
+                )}
+                {total > 0 && (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: "10px",
+                            marginTop: "20px",
+                        }}>
+                        <Button
+                            variant={"text"}
+                            color={"primary"}
+                            disabled={page === 1}
+                            onClick={() => handlePageChange(page - 1)}>
+                            이전
+                        </Button>
+                        <Button
+                            variant={"text"}
+                            color={"primary"}
+                            disabled={page === totalPage}
+                            onClick={() => handlePageChange(page + 1)}>
+                            다음
+                        </Button>
+                    </div>
                 )}
             </Card>
         </AdminContainer>

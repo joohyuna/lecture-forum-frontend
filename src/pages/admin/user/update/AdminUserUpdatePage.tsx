@@ -97,16 +97,16 @@ function AdminUserUpdatePage() {
 
             <Card>
                 {isLoading ? (
-                    <AdminLoadingText>데이터를 불러오는 중</AdminLoadingText>
+                    <AdminLoadingText>데이터를 불러오는 중...</AdminLoadingText>
                 ) : (
-                    <AdminForm onSubmit={handleSubmit(onSubmit)} $wrap={true}>
+                    <AdminForm onSubmit={handleSubmit(onSubmit)} $wrap={ true }>
                         <InputGroup
                             wrap={true}
                             label={"아이디"}
                             id={"username"}
                             errorMessage={errors.username?.message}
                             registerObj={register("username")}
-                            placeholder={"4자이상 필요"}
+                            placeholder={"4자 이상 필요"}
                         />
 
                         <InputGroup
@@ -115,7 +115,7 @@ function AdminUserUpdatePage() {
                             id={"password"}
                             errorMessage={errors.password?.message}
                             registerObj={register("password")}
-                            placeholder={"6자이상 필요"}
+                            placeholder={"6자 이상 필요"}
                             type={"password"}
                         />
 
