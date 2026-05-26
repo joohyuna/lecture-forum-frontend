@@ -16,26 +16,61 @@ import Button from "../../../components/common/button/Button.tsx";
 import { Link } from "react-router";
 import Card from "../../../components/common/card/Card.tsx";
 import Badge from "../../../components/common/badge/Badge.tsx";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 function AdminUserListPage() {
     const [list, setList] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const loadUsers = async () => {
+        try {
+            const data = await adminUserApi.fetchUserList();
+            setList(data);
+        } catch (error) {
+            console.log(error);
+            alert("사용자 목록을 불러오는데 실패했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const loadUser = async () => {
-            try {
-                const data = await adminUserApi.fetchUserList();
-                setList(data);
-            } catch (error) {
-                console.log(error);
-                alert("사용자 목록을 불러오는데 실패했습니다.");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        loadUser().then(() => {});
+        // 이 함수는, 백엔드에게 내용을 받아서 state에 저장 => 화면 출력을 해주는 함수를 useEffect 매개 변수 안에 작성해서
+        // 함수 안에 함수를 선언하고, 그걸 실행 했었음
+        // 함수 스코프에 의해 외부에서는 실행이 불가능함 => 외부에서 저 기능을 이용해야 되는 상황이 되었으니
+        // 그함수를 밖으로 뺌
+
+        // 문법 오류
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        loadUsers().then(() => {});
     }, []);
+
+    const handleDelete = async (id: number) => {
+        // confirm은 사용자에게 경고차을 통해 확인을 받는 메서드, true/false가 반환됨
+        // 그렇게 최소를 하면 더이상 함수 진행을 안함
+        if (!confirm("정말 이 유저를 삭제(탈퇴) 처리 하시겠습니까?")) {
+            return;
+        }
+
+        try {
+            await adminUserApi.deleteUser(id);
+            alert("사용자 정보가 성공적으로 삭제되었습니다.");
+
+            // 그렇게 삭제처리가 끝난 정보가 result에 도착했고,
+            // 사용자 화면에 반영해줘야 함
+            // 1. 다시금 백엔드에게 요청해서 데이터를 받아 화면 갱신
+            // 2. 삭제됨 사용자 정보를 화면에 바로 반영 (백엔드 X)
+            // 카테고리 목록 화면에서는 2번으로 진행 했었음
+
+            // 1번으로 진행을 하려면 => 이미 우리가 작성한 내용이 있음
+            // 1-1 백엔드에게 다시 데이터 요청
+            // 1-2. 받아온 정보를 목록을 관리하는 status에 덮어쓰기
+            loadUsers().then(() => {});
+        } catch (error) {
+            console.log(error);
+            alert("사용자 삭제 중 오류가 발생했습니다.");
+        }
+    }
 
     return (
         <AdminContainer>
@@ -82,7 +117,10 @@ function AdminUserListPage() {
                                         </AdminTd>
                                         <AdminTd>{item.email}</AdminTd>
                                         <AdminTd>
-                                            <Badge color={item.role === Role.ADMIN ? "error" : "primary"}>
+                                            <Badge
+                                                color={
+                                                    item.role === Role.ADMIN ? "error" : "primary"
+                                                }>
                                                 {item.role === Role.ADMIN ? "관리자" : "일반"}
                                             </Badge>
                                         </AdminTd>
@@ -91,12 +129,26 @@ function AdminUserListPage() {
                                                 {item.deletedAt ? "탈퇴" : "정상"}
                                             </Badge>
                                         </AdminTd>
-                                        <AdminTd>{new Date(item.createdAt).toLocaleString()}</AdminTd>
+                                        <AdminTd>
+                                            {new Date(item.createdAt).toLocaleString()}
+                                        </AdminTd>
                                         <AdminTd>
                                             <AdminButtonGroup>
-                                                <Button variant={"icon"} color={"primary"} as={Link} to={`/admin/user/${item.id}`}>
+                                                <Button
+                                                    variant={"icon"}
+                                                    color={"primary"}
+                                                    as={Link}
+                                                    to={`/admin/user/${item.id}`}>
                                                     <FiEdit size={18} />
                                                 </Button>
+                                                {!item.deletedAt && (
+                                                    <Button
+                                                        variant={"icon"}
+                                                        color={"error"}
+                                                        onClick={() => handleDelete(item.id)}>
+                                                        <FiTrash size={18} />
+                                                    </Button>
+                                                )}
                                             </AdminButtonGroup>
                                         </AdminTd>
                                     </tr>

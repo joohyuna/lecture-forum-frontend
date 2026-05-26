@@ -1,14 +1,15 @@
 import {
     AdminButtonGroup,
     AdminContainer,
-    AdminForm, AdminLoadingText,
+    AdminForm,
+    AdminLoadingText,
     AdminPageHeader,
     AdminTitle,
 } from "../../../../components/admin/admin.style.tsx";
 import Card from "../../../../components/common/card/Card.tsx";
 import InputGroup from "../../../../components/common/input/InputGroup.tsx";
 import SelectGroup from "../../../../components/common/select/SelectGroup.tsx";
-import { Gender, Role} from "../../../../types/user.type.ts";
+import { Gender, Role } from "../../../../types/user.type.ts";
 import { AuthRootErrorMessage } from "../../../../components/auth/auth.style.tsx";
 import Button from "../../../../components/common/button/Button.tsx";
 import { Link, useNavigate, useParams } from "react-router";
@@ -24,7 +25,7 @@ import { useEffect, useState } from "react";
 
 function AdminUserUpdatePage() {
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string; }>();
+    const { id } = useParams<{ id: string }>();
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,7 +34,7 @@ function AdminUserUpdatePage() {
         handleSubmit,
         setError,
         // setValue, // 중간에 값을 바꿔주는것
-        reset,   // 새로이 react-hook-form이 관히하는 state 값을 리셋
+        reset, // 새로이 react-hook-form이 관히하는 state 값을 리셋
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: zodResolver(adminUpdateUserSchema),
@@ -49,7 +50,7 @@ function AdminUserUpdatePage() {
                 // 2026-05-22-22T00:00:000Z 형태 (ISO 8601 국제 표준 날짜 및 시간 표기법)
                 // input type="data"로 지정한 input은 "2026-05-22" 형태로 받아야함
                 // 결국 ISO 8601 표기법의 값 중 T부터 뒷부분을 잘라 전달해줘야 정상 출력됨
-                reset ({
+                reset({
                     username: result.username,
                     name: result.name,
                     nickname: result.nickname,
@@ -58,7 +59,7 @@ function AdminUserUpdatePage() {
                     role: result.role,
                     phoneNumber: result.phoneNumber ?? undefined,
                     birthdate: result.birthdate ? result.birthdate.split("T")[0] : undefined,
-                })
+                });
             } catch (error) {
                 console.log(error);
                 alert("사용자 정보를 불러오는 도중 오류가 발생했습니다.");
@@ -66,11 +67,9 @@ function AdminUserUpdatePage() {
             } finally {
                 setIsLoading(false);
             }
-        }
-        loadUser().then(() => {}) ;
+        };
+        loadUser().then(() => {});
     }, [id, navigate, reset]);
-
-
 
     const onSubmit = async (data: AdminUpdateUserInputType) => {
         try {
@@ -84,11 +83,11 @@ function AdminUserUpdatePage() {
             // setError("root", {message: "사용자 정보의 업데이트에 실패했습니다."});
 
             if (axios.isAxiosError(error)) {
-                setError("root", {message: error.response?.data?.message});
+                setError("root", { message: error.response?.data?.message });
             }
             setError("root", { message: "사용자 정보의 업데이트에 실패했습니다." });
         }
-    }
+    };
 
     return (
         <AdminContainer>
