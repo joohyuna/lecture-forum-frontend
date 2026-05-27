@@ -55,9 +55,7 @@ const NavItem = styled(Link)`
     transition: all 0.3s;
      
     &:hover {
-        display: flex;
-        align-items: center;
-        gap: 16px;
+        color: ${props => props.theme.colors.primary}
     }
 `;
 
