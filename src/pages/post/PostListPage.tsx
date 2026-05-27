@@ -1,5 +1,5 @@
 function PostListPage() {
-    return <></>
+    return <></>;
 }
 
 export default PostListPage;

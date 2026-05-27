@@ -5,9 +5,8 @@ import type { Post } from "../../types/post.type.ts";
 const fetchPostListByCategory = async (): Promise<PaginationResponseType<Post>> => {
     const response = await axiosInstance.get("/post/:categoryId");
     return response.data.data;
-    
-    }
-    
-    export default {
-        fetchPostListByCategory,
-    };
+};
+
+export default {
+    fetchPostListByCategory,
+};
