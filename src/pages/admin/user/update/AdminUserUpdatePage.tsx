@@ -77,6 +77,7 @@ function AdminUserUpdatePage() {
             alert("사용자 정보의 업데이트가 완료 되었습니다.");
             navigate("/admin/user");
         } catch (error) {
+            console.log(error);
             // backend에서 여러가지 이유로 실패됐다는 내용을 전달해줄 수 있음
             // 어떠한 에러가 도착하든, 저 text만 화면에 출력하고 끝내겠다.
             // console.log(error);
