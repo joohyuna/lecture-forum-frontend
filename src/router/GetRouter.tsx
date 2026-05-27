@@ -12,6 +12,7 @@ import AdminCategoryEditPage from "../pages/admin/category/edit/AdminCategoryEdi
 import AdminUserListPage from "../pages/admin/user/AdminUserListPage.tsx";
 import AdminUserCreatePage from "../pages/admin/user/create/AdminUserCreatePage.tsx";
 import AdminUserUpdatePage from "../pages/admin/user/update/AdminUserUpdatePage.tsx";
+import PostListPage from "../pages/post/PostListPage.tsx";
 
 
 // 회원의 권한에 따라 접근할 수 있는 주소를 판별하기 위해서
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
             { index: true, element: <HomePage /> },
+            { path: "category", children: [
+                    { path: ":categoryId", element: <PostListPage /> }
+                ]
+            },
             {
                 path: "auth",
                 loader: guestLoader,
