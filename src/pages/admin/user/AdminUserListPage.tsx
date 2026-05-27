@@ -27,13 +27,12 @@ function AdminUserListPage() {
     // const page = page
     const page = Number(searchParams.get("page")) || 1;
 
-
     const SIZE = 20; // 고정값
     // const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const totalPage = Math.ceil(total / SIZE); // Math.ceil() : 올림 메서드
 
-    const loadUsers = async (page:number) => {
+    const loadUsers = async (page: number) => {
         try {
             const data = await adminUserApi.fetchUserList(page, SIZE);
             setList(data.list);
@@ -102,8 +101,8 @@ function AdminUserListPage() {
     const handlePageChange = (page: number) => {
         // status의 값을 바로 바꾸는게 아니라,
         // 쿼리스트링에 존재하는 page의 값을 변경해야 함
-        searchParams.set("page", page.toLocaleString());    // searchParams 내붕의 page  프로퍼티 값을 변경
-        setSearchParams(searchParams);      // 주소 변경
+        searchParams.set("page", page.toLocaleString()); // searchParams 내붕의 page  프로퍼티 값을 변경
+        setSearchParams(searchParams); // 주소 변경
     };
 
     return (
