@@ -15,6 +15,7 @@
 // const path = require("path");  // import path from "path";
 //const dotenv = require("dotenv");
 // dotenv를 통해 환경변수 파일ㅇ르 불러오는데, 매개변수에 옶녀 객체를 넣어 설정을 해줄 수 있음
+// 터미널 node install dotenv 설치
 // path라는 라이브러리를 통해 __dirname (현재 경로 위치값에 저장되어 잇는 기본 변수) 와 "../.env"를
 // 합쳐서 (join) 넣어줌
 
@@ -59,6 +60,7 @@ async function generateUser(count) {
             // random 사용하는 방법을 한다면
             // Math.random() : 랜덤한 숫자를  만드는 메서드
             // .toString(숫자) : 숫자 진법을 통해 string으로 변환  => 36진법은 0~9, a~z끼지 사용 가능
+            // 메소드 체인 레고같이 조립하는 것이다.
             const unique = Math.random().toString(36).slice(-3);
 
             const dummyData = {
@@ -85,4 +87,5 @@ async function generateUser(count) {
     }
 }
 
+// 문법때문에 then의 문법을 써준것임
 generateUser(3).then(() => {});

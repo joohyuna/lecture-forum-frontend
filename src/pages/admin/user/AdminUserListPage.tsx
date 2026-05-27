@@ -13,7 +13,7 @@ import {
     AdminTitle,
 } from "../../../components/admin/admin.style.tsx";
 import Button from "../../../components/common/button/Button.tsx";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import Card from "../../../components/common/card/Card.tsx";
 import Badge from "../../../components/common/badge/Badge.tsx";
 import { FiEdit, FiTrash } from "react-icons/fi";
@@ -22,8 +22,14 @@ function AdminUserListPage() {
     const [list, setList] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    // const pageParams = searchParams.get("page");
+    // const page = page
+    const page = Number(searchParams.get("page")) || 1;
+
+
     const SIZE = 20; // 고정값
-    const [page, setPage] = useState(1);
+    // const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const totalPage = Math.ceil(total / SIZE); // Math.ceil() : 올림 메서드
 
@@ -45,12 +51,21 @@ function AdminUserListPage() {
     // useEffect는 useEffect(함수, 의존성 배열);
     // useEffect(() => {}, [요기가 의존성 배열]);
     // 의존성 배열에 넣은 변수나 함수나 메서드나 state가 바뀔때 재 실행됨
+    // 의존성이 없을 때 [] => 초기 렌더링이 끝난 이후 무조건 1번 실행
+    // 이 함수를 page state의 값이 바뀔 때 실행을 해줄 필요가 생김
+    // 의존성 배열이 있는 이유는,
+    // 의존성 배열이 state나 함수나, 변수를 집어넣을 수 있는데
+    //
 
     useEffect(() => {
         // 이 함수는, 백엔드에게 내용을 받아서 state에 저장 => 화면 출력을 해주는 함수를 useEffect 매개 변수 안에 작성해서
         // 함수 안에 함수를 선언하고, 그걸 실행 했었음
         // 함수 스코프에 의해 외부에서는 실행이 불가능함 => 외부에서 저 기능을 이용해야 되는 상황이 되었으니
         // 그함수를 밖으로 뺌
+
+        // 사용자의 스크롤을 이동시키는 명령
+        // window 브라우저에서 사용자의 위치to
+        window.scrollTo({ top: 0, behavior: "instant" });
 
         // 문법 오류
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -85,7 +100,10 @@ function AdminUserListPage() {
     };
 
     const handlePageChange = (page: number) => {
-        setPage(page);
+        // status의 값을 바로 바꾸는게 아니라,
+        // 쿼리스트링에 존재하는 page의 값을 변경해야 함
+        searchParams.set("page", page.toLocaleString());    // searchParams 내붕의 page  프로퍼티 값을 변경
+        setSearchParams(searchParams);      // 주소 변경
     };
 
     return (
@@ -99,7 +117,7 @@ function AdminUserListPage() {
 
             <Card>
                 {isLoading ? (
-                    <AdminLoadingText>불러오는 중 ...</AdminLoadingText>
+                    <AdminLoadingText>불러오는 중...</AdminLoadingText>
                 ) : (
                     <AdminTableWrapper>
                         <AdminTable>
