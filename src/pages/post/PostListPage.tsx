@@ -14,6 +14,7 @@ import {
 } from "../../components/post/post.style.tsx";
 import Button from "../../components/common/button/Button.tsx";
 import { useAuthStore } from "../../stores/auth/authStore.ts";
+import Pagination from "../../components/common/pagination/Pagination.tsx";
 
 function PostListPage() {
     // 주소를 통해 categoryId가 오는 구나
@@ -35,9 +36,14 @@ function PostListPage() {
 
     const totalPage = Math.ceil(total / size);
 
+
+
     useEffect(() => {
         const loadList = async () => {
             try {
+                // 지금 테마 화면 기준 파랑색은 기능
+                // 노란색은 export default된 것 일 수 있고, 클래스일 수도 있음
+                // 클래스는 객체일 수도 있고, 기능일 수도 있음
                 const data = await postApi.fetchPostListByCategory(Number(categoryId), page, size);
                 setList(data.list);
                 setTotal(data.total);
@@ -52,6 +58,11 @@ function PostListPage() {
         window.scrollTo({ top: 0, behavior: "smooth" });
         loadList().then(() => {});
     }, [page, categoryId, size]); // 함수 스코프 외부에 있는 내용을 불러와서 적는다.
+
+    const onPageChange = (page: number) => {
+        searchParams.set("page", page.toString());
+        setSearchParams(searchParams); // 주소 변경
+    }
 
     // 글목록, 게시판 상세, 게시글 작성, 게시글 수정
 
@@ -97,10 +108,33 @@ function PostListPage() {
                                     </BoardTd>
                                 </tr>
                             )}
+                            {list.map(item => (
+                                <tr key={item.id}>
+                                    <BoardTd>{item.id}</BoardTd>
+                                    <BoardTd className={"title-cell"}>{item.title}</BoardTd>
+                                    <BoardTd>{item.user.nickname}</BoardTd>
+                                    <BoardTd>
+                                        {/*
+                                            Date 클래스의 메서드 중 toLocaleString()은
+                                            해당 날짜를 사용자의 지역 시간에 맞게 문자열로 변환하는 메서드
+                                            매개변수를 생략하면 자동으로 보는 사용자에 맞춰 제공됨
+                                            .toLocaleString(해당 지역, 옵션 객체)
+                                        */}
+                                        {new Date(item.createdAt).toLocaleString("ko-KR", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                        })}
+                                    </BoardTd>
+                                    <BoardTd>{item.views}</BoardTd>
+                                </tr>
+                            ))}
                         </tbody>
                     </BoardTable>
                 )}
             </BoardWrapper>
+
+            <Pagination currentPage={page} totalPages={totalPage} onPageChange={onPageChange} />
         </PostContainer>
     );
 }
