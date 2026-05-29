@@ -36,8 +36,6 @@ function PostListPage() {
 
     const totalPage = Math.ceil(total / size);
 
-
-
     useEffect(() => {
         const loadList = async () => {
             try {
@@ -62,7 +60,7 @@ function PostListPage() {
     const onPageChange = (page: number) => {
         searchParams.set("page", page.toString());
         setSearchParams(searchParams); // 주소 변경
-    }
+    };
 
     // 글목록, 게시판 상세, 게시글 작성, 게시글 수정
 
@@ -134,7 +132,7 @@ function PostListPage() {
                 )}
             </BoardWrapper>
 
-            <Pagination currentPage={page} totalPages={totalPage} onPageChange={onPageChange} />
+            <Pagination currentPage={page} totalPage={totalPage} onPageChange={onPageChange} />
         </PostContainer>
     );
 }

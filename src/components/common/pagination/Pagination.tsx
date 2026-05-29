@@ -8,7 +8,6 @@ type Props = {
     maxVisiblePages?: number;
 };
 
-
 function Pagination({ currentPage, totalPage, onPageChange, maxVisiblePages = 5 }: Props) {
     if (totalPage <= 1) {
         return null;
@@ -40,7 +39,9 @@ function Pagination({ currentPage, totalPage, onPageChange, maxVisiblePages = 5 
                     {item}
                 </PageNumberButton>
             ))}
-            <ArronButton disabled={currentPage === totalPage} onClick={() => onPageChange(currentPage + 1)}>
+            <ArronButton
+                disabled={currentPage === totalPage}
+                onClick={() => onPageChange(currentPage + 1)}>
                 <FiChevronRight size={18} />
             </ArronButton>
         </PaginationContainer>
@@ -68,18 +69,20 @@ const PageNumberButton = styled.button<{ $isActive: boolean }>`
     font-weight: 600;
     border: 1px solid
         ${props => (props.$isActive ? props.theme.colors.primary : props.theme.colors.divider)};
-    background-color: ${props => props.$isActive ? props.theme.colors.primary : props.theme.colors.background.paper};
-    color: ${props => props.$isActive ? "#FFFFFF" : props.theme.colors.text.default};
+    background-color: ${props =>
+        props.$isActive ? props.theme.colors.primary : props.theme.colors.background.paper};
+    color: ${props => (props.$isActive ? "#FFFFFF" : props.theme.colors.text.default)};
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-        ${props => !props.$isActive && `
+        ${props =>
+            !props.$isActive &&
+            `
         background-color: ${props.theme.colors.background.default};
-        color: ${props.theme.colors.primary}
+        color: ${props.theme.colors.primary};
         `}
-        
     }
 `;
 
@@ -92,8 +95,7 @@ const ArronButton = styled.button`
     padding: 0 6px;
     font-size: 14px;
     font-weight: 600;
-    border: 1px solid
-    ${props => props.theme.colors.divider};
+    border: 1px solid ${props => props.theme.colors.divider};
     background-color: ${props => props.theme.colors.background.paper};
     color: ${props => props.theme.colors.text.default};
     border-radius: 6px;
@@ -101,11 +103,8 @@ const ArronButton = styled.button`
     transition: all 0.2s;
 
     &:hover {
-       
         background-color: ${props => props.theme.colors.background.default};
-        color: ${props => props.theme.colors.primary}
-        
-
+        color: ${props => props.theme.colors.primary};
     }
     &:disabled {
         color: ${props => props.theme.colors.text.disabled};
@@ -114,5 +113,4 @@ const ArronButton = styled.button`
         cursor: not-allowed;
         opacity: 0.6;
     }
-    
 `;

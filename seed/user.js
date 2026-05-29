@@ -88,4 +88,4 @@ async function generateUser(count) {
 }
 
 // 문법때문에 then의 문법을 써준것임
-generateUser(300).then(() => {});
+generateUser(3).then(() => {});

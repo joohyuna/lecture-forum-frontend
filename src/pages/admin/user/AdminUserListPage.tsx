@@ -102,7 +102,7 @@ function AdminUserListPage() {
     const handlePageChange = (page: number) => {
         // status의 값을 바로 바꾸는게 아니라,
         // 쿼리스트링에 존재하는 page의 값을 변경해야 함
-        searchParams.set("page", page.toLocaleString()); // searchParams 내붕의 page  프로퍼티 값을 변경
+        searchParams.set("page", page.toString()); // searchParams 내부의 page  프로퍼티 값을 변경
         setSearchParams(searchParams); // 주소 변경
     };
 
