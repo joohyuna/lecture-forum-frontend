@@ -166,6 +166,8 @@ export const DetailContent = styled.div`
     white-space: pre-wrap;
 `;
 
+
+// 투표에 대한 style
 export const BattleGround = styled.div`
     margin-top: 60px;
     padding: 32px;
@@ -219,13 +221,82 @@ export const VoteCard = styled.button<{ $color: string }>`
         font-size: 14px;
         color: ${props => props.theme.colors.text.disabled};
     }
-    
+
     &:hover {
         border-color: ${props => props.$color};
         transform: translateY(-4px);
     }
 `;
 
+export const ResultSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+`;
+
+export const ResultBarWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    height: 60px;
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: ${props => props.theme.colors.divider};
+`;
+
+export const ResultBar = styled.div<{$color: string, $width: string}>`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    width: ${props => props.$width};
+    background-color: ${props => props.$color};
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    transition: width 1s;
+    white-space: nowrap;
+    overflow: hidden;
+    
+    .label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .percent {
+        font-size: 18px;
+    }
+`;
+
+export const ResultText = styled.p`
+    text-align: center;
+    font-size: 14px;
+    color: ${props => props.theme.colors.secondary};
+    margin-top: 8px;
+`;
+
+export const RevoteButton = styled.button`
+display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 16px auto 0 auto;
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: ${props => props.theme.colors.secondary};
+    background-color: transparent;
+    border: 1px solid ${props => props.theme.colors.divider};
+    border-radius: 20px;
+    transition: all 0.2s;
+    
+    &:hover {
+        color: ${props => props.theme.colors.text.default};
+        border-color: ${props => props.theme.colors.secondary};
+        background-color: ${props => props.theme.colors.background.default};
+    }
+`;
+
+// 로딩
 export const LoadingText = styled.div`
     text-align: center;
     padding: 100px 0;

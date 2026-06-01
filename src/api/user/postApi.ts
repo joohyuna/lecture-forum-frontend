@@ -24,13 +24,17 @@ const createPost = async (data: CreatePostInputType) => {
 
 const votePost = async (postId: number, option: number) => {
     await axiosInstance.post(`/post/${postId}/vote`, { option });
-    // 백엔드가 처리후 응답(Response)하는 내용이 필요없으며 return 안해도 됨
-    // 필요 없을면 return할 필요 없음
-}
+    // 백엔드가 처리후 응답(Response)하는 내용이 필요없으면 return 안해도 됨
+};
+
+const cancelVotePost = async (postId: number) => {
+    await axiosInstance.delete(`/post/${postId}/vote`);
+};
 
 export default {
     fetchPostListByCategory,
     createPost,
     fetchPostById,
     votePost,
+    cancelVotePost,
 };

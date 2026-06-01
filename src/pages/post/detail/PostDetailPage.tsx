@@ -12,6 +12,11 @@ import {
     DetailWrapper,
     LoadingText,
     PostContainer,
+    ResultBar,
+    ResultBarWrapper,
+    ResultSection,
+    ResultText,
+    RevoteButton,
     VoteCard,
     VoteSection,
 } from "../../../components/post/post.style.tsx";
@@ -19,13 +24,14 @@ import { useAuthStore } from "../../../stores/auth/authStore.ts";
 import { AdminButtonGroup } from "../../../components/admin/admin.style.tsx";
 import Button from "../../../components/common/button/Button.tsx";
 import { GiCrossedSwords } from "react-icons/gi";
-import { LuDroplets, LuFlame } from "react-icons/lu";
+import { LuDroplets, LuFlame, LuRotateCcw} from "react-icons/lu";
 
 function PostDetailPage() {
     const navigate = useNavigate();
     const [post, setPost] = useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isVoting, setIsVoting] = useState<boolean>(false);
+    const [isCanceling, setIsCanceling] = useState<boolean>(false);
 
     const { id } = useParams<{ id: string }>();
     const { user, isLoggedIn } = useAuthStore();
@@ -37,7 +43,7 @@ function PostDetailPage() {
 
     // 이 문법 오류를 해결하기 위해서는 useCallback()리액트 훅을 사용
     // useCallback 사용은 useEffect와 동일하게 사용
-    // (함수, 의본성배열)
+    // useCallback(함수, 의존성배열)
     const loadPost = useCallback(async () => {
         try {
             const data = await postApi.fetchPostById(Number(id));
@@ -52,6 +58,7 @@ function PostDetailPage() {
     }, [id, navigate]);
 
     useEffect(() => {
+        // 문법 오류를 억제하는 텍스트
         // eslint-disable-next-line react-hooks/set-state-in-effect
         loadPost().then(() => {});
     }, [id, loadPost]);
@@ -69,7 +76,8 @@ function PostDetailPage() {
     // post라고 하는 데이터가 불러온 이후에나 판별이 가능
     const hasVoteSystem = !!post.option1Text && !!post.option2Text;
     const totalVotes = post.vote?.totalCount || 0;
-    // 전체 투표 수가 0이면, option1 ㅌ표한 퍼센트를 50%로 가져가고, opt2 투표한 퍼센트도 50%
+
+    // 전체 투표 수가 0이면, option1 투표한 퍼센트를 50%로 가져가고, opt2 투표한 퍼센트도 50%
     // Math.ceil => 올림
     // Math.round(값, ) => 반올림
     const opt1Percent =
@@ -87,15 +95,33 @@ function PostDetailPage() {
         setIsVoting(true);
         try {
             await postApi.votePost(Number(id), option);
-            // 여기서 글 내용을 다시 받아와야 할 필료가 있음
+            // 여기서 글 내용을 다시 받아와야 할 필요가 있음
             await loadPost();
         } catch (error) {
-            console.log("투표실패 : " , error);
+            console.log("투표실패 : ", error);
             alert("투표처리중 오류가 발생했습니다.");
         } finally {
             setIsVoting(false);
         }
     };
+
+    const handleCancelVote = async () => {
+        if (!confirm("투표를 취소하고 다시 선택하시겠습니까?")) {
+            return;
+        }
+
+        setIsCanceling(true);
+        try {
+           await postApi.cancelVotePost(Number(id));
+            await loadPost();
+        } catch (error) {
+            console.log("투표 취소 실패 :", error);
+            alert("투표 취소 처리 중 오류가 발생했습니다.");
+
+        } finally {
+            setIsCanceling(false);
+        }
+    }
 
     return (
         <PostContainer>
@@ -131,10 +157,34 @@ function PostDetailPage() {
                             당신의 선택은 ?
                         </BattleTitle>
 
-                        {/* 지금 현재 상요자가 투표를 했을 때, 투표를 안 했을 때 */}
+                        {/* 지금 현재 사용자가 투표를 했을 때, 투표를 안 했을 때 */}
                         {post.vote.hasVoted ? (
-                            // 투표가 되었을 때 UI
-                            <></>
+                            // 투표가 되었을 때
+                            <ResultSection>
+                                <ResultBarWrapper>
+                                    <ResultBar $color={"#EF4444"} $width={`${opt1Percent}%`}>
+                                        <span className={"label"}>
+                                            <LuFlame /> {post.option1Text}
+                                        </span>
+                                        <span className={"percent"}>
+                                            {opt1Percent}% ({post.vote.option1Count}명)
+                                        </span>
+                                    </ResultBar>
+                                    <ResultBar $color={"#3B82F6"} $width={`${opt2Percent}%`}>
+                                        <span className={"label"}>
+                                            <LuDroplets /> {post.option2Text}
+                                        </span>
+                                        <span className={"percent"}>
+                                            {opt2Percent}% ({post.vote.option2Count}명)
+                                        </span>
+                                    </ResultBar>
+                                </ResultBarWrapper>
+                                <ResultText>소중한 한 표가 전황에 반영되었습니다.</ResultText>
+                                <RevoteButton onClick={handleCancelVote} disabled={isCanceling}>
+                                    <LuRotateCcw size={16} /> 다시 투표하기
+                                </RevoteButton>
+
+                            </ResultSection>
                         ) : (
                             // 투표가 안되었을 때
                             <VoteSection>
