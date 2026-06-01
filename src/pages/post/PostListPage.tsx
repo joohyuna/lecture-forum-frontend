@@ -87,48 +87,48 @@ function PostListPage() {
                 ) : (
                     <BoardTable>
                         <thead>
-                        <tr>
-                            <BoardTh $width={"10%"}>번호</BoardTh>
-                            <BoardTh>제목</BoardTh>
-                            <BoardTh $width={"15%"}>작성자</BoardTh>
-                            <BoardTh $width={"15%"}>작성일</BoardTh>
-                            <BoardTh $width={"10%"}>조회수</BoardTh>
-                        </tr>
+                            <tr>
+                                <BoardTh $width={"10%"}>번호</BoardTh>
+                                <BoardTh>제목</BoardTh>
+                                <BoardTh $width={"15%"}>작성자</BoardTh>
+                                <BoardTh $width={"15%"}>작성일</BoardTh>
+                                <BoardTh $width={"10%"}>조회수</BoardTh>
+                            </tr>
                         </thead>
                         <tbody>
-                        {list.length === 0 && (
-                            <tr>
-                                <BoardTd
-                                    colSpan={5}
-                                    $align={"center"}
-                                    style={{ padding: "100px 0" }}>
-                                    아직 작성된 게시글이 없습니다. 첫 글을 남겨보세요
-                                </BoardTd>
-                            </tr>
-                        )}
-                        {list.map(item => (
-                            <tr key={item.id}>
-                                <BoardTd>{item.id}</BoardTd>
-                                <BoardTd className={"title-cell"}>
-                                    <Link to={`/post/${item.id}`}>{item.title}</Link>
-                                </BoardTd>
-                                <BoardTd>{item.user.nickname}</BoardTd>
-                                <BoardTd>
-                                    {/*
+                            {list.length === 0 && (
+                                <tr>
+                                    <BoardTd
+                                        colSpan={5}
+                                        $align={"center"}
+                                        style={{ padding: "100px 0" }}>
+                                        아직 작성된 게시글이 없습니다. 첫 글을 남겨보세요
+                                    </BoardTd>
+                                </tr>
+                            )}
+                            {list.map(item => (
+                                <tr key={item.id}>
+                                    <BoardTd>{item.id}</BoardTd>
+                                    <BoardTd className={"title-cell"}>
+                                        <Link to={`/post/${item.id}`}>{item.title}</Link>
+                                    </BoardTd>
+                                    <BoardTd>{item.user.nickname}</BoardTd>
+                                    <BoardTd>
+                                        {/*
                                             Date 클래스의 메서드 중 toLocaleString()은
                                             해당 날짜를 사용자의 지역 시간에 맞게 문자열로 변환하는 메서드
                                             매개변수를 생략하면 자동으로 보는 사용자에 맞춰 제공됨
                                             .toLocaleString(해당 지역, 옵션 객체)
                                         */}
-                                    {new Date(item.createdAt).toLocaleString("ko-KR", {
-                                        year: "numeric",
-                                        month: "2-digit",
-                                        day: "2-digit",
-                                    })}
-                                </BoardTd>
-                                <BoardTd>{item.views}</BoardTd>
-                            </tr>
-                        ))}
+                                        {new Date(item.createdAt).toLocaleString("ko-KR", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                        })}
+                                    </BoardTd>
+                                    <BoardTd>{item.views}</BoardTd>
+                                </tr>
+                            ))}
                         </tbody>
                     </BoardTable>
                 )}

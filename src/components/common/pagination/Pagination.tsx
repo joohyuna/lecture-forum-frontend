@@ -17,10 +17,10 @@ function Pagination({ currentPage, totalPage, onPageChange, maxVisiblePages = 5 
     const currentBlock = Math.ceil(currentPage / maxVisiblePages);
     // 13번 페이지를 보고 있는데 maxVisiblePages 5개 라고 했다면
     // 13 / 5  = 올림하면 3
-    // 블록 구성은 1 ~5, 6 ~10, 11~ 15로 되므로 3번 블록에 속한다가 됨
-    const startPage = (currentBlock - 1) * maxVisiblePages + 1; // 11번 페이지가 시작이구나
+    // 블록 구성은 1 ~ 5, 6 ~ 10, 11 ~ 15로 되므로 3번 블록에 속한다가 됨
+    const startPage = (currentBlock - 1) * maxVisiblePages + 1; // 예시 11번 페이지가 시작이구나
     // Math.min() 매개변수에 제공되는 숫자들 중에 작은 값을 구햐는 메서드
-    const endPage = Math.min(startPage + maxVisiblePages - 1, totalPage); //15번 패\이지
+    const endPage = Math.min(startPage + maxVisiblePages - 1, totalPage); // 예시 15번째 페이지가 되는 구나 , 둘중에 작은것을 선택
 
     const pageNumber = [];
     for (let i = startPage; i <= endPage; i++) {

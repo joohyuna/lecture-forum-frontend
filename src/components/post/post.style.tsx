@@ -29,7 +29,7 @@ export const PostTitle = styled.h2`
 `;
 
 export const FormWrapper = styled.form`
-background-color: ${props => props.theme.colors.background.paper};
+    background-color: ${props => props.theme.colors.background.paper};
     border-radius: 8px;
     border: 1px solid ${props => props.theme.colors.divider};
     padding: 32px;
@@ -41,11 +41,10 @@ background-color: ${props => props.theme.colors.background.paper};
 export const FormDivider = styled.hr`
     border: none;
     border-top: 1px solid ${props => props.theme.colors.divider};
-    
 `;
 
 export const VoteSectionTitle = styled.h3`
-font-size: 18px;
+    font-size: 18px;
     font-weight: 700;
     margin-bottom: -15px;
     display: flex;
@@ -145,13 +144,13 @@ export const DetailInfo = styled.div`
     align-items: center;
     font-size: 14px;
     color: ${props => props.theme.colors.text.disabled};
-    
+
     .left-info {
         display: flex;
         gap: 16px;
         align-items: center;
     }
-    
+
     .right-info {
         display: flex;
         gap: 16px;
@@ -164,7 +163,67 @@ export const DetailContent = styled.div`
     font-size: 16px;
     line-height: 1.6;
     min-height: 100px;
-    white-space: pre-wrap;  
+    white-space: pre-wrap;
+`;
+
+export const BattleGround = styled.div`
+    margin-top: 60px;
+    padding: 32px;
+    background-color: ${props => props.theme.colors.background.default};
+    border-radius: 12px;
+    border: 1px solid ${props => props.theme.colors.divider};
+`;
+
+export const BattleTitle = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 32px;
+`;
+
+export const VoteSection = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+`;
+
+export const VoteCard = styled.button<{ $color: string }>`
+    flex: 1;
+    width: 100%;
+    padding: 40px 20px;
+    background-color: ${props => props.theme.colors.background.paper};
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    color: ${props => props.theme.colors.text.default};
+
+    svg {
+        color: ${props => props.$color};
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    p {
+        font-size: 14px;
+        color: ${props => props.theme.colors.text.disabled};
+    }
+    
+    &:hover {
+        border-color: ${props => props.$color};
+        transform: translateY(-4px);
+    }
 `;
 
 export const LoadingText = styled.div`
