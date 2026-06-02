@@ -39,7 +39,7 @@ function PostReply({ postId }: Props) {
     // submit을 하는데 zod가 "너 postId 없는데?" 라서 진행이 안 됐던 것
     // postId는 PostReply 컴포넌트가 Props를 통ㅇ해 전달을 받고 있는데
     // 그 값이 react-hook-form이 관리학소 있는 state에 기록이 안돼서
-    // 그래서 그걸 postId의 값이 도착하면 useEffect가 발동하면서 react-hook-form의 state
+    // 그래서 그걸 postId의 값이 도착하면 useEffect가 발동하면서 react-hook-form의 state에 값을 넣어주도록 함
 
     const onSubmit = async (data: CreateReplyInputType) => {
         try {
