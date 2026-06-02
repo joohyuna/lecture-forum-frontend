@@ -15,6 +15,7 @@ import { useAuthStore } from "../../../stores/auth/authStore.ts";
 import { AdminButtonGroup } from "../../../components/admin/admin.style.tsx";
 import Button from "../../../components/common/button/Button.tsx";
 import PostVote from "../../../components/post/PostVote.tsx";
+import PostReply from "../../../components/post/PostReply.tsx";
 
 function PostDetailPage() {
     const navigate = useNavigate();
@@ -98,7 +99,7 @@ function PostDetailPage() {
 
                 <PostVote post={post} loadPost={loadPost}/>
 
-                <AdminButtonGroup>
+                <AdminButtonGroup style={{ marginTop: "40px" }}>
                     <Button color={"secondary"} variant={"contained"} onClick={() => navigate(-1)}>
                         목록으로
                     </Button>
@@ -113,6 +114,8 @@ function PostDetailPage() {
                         </>
                     )}
                 </AdminButtonGroup>
+
+                <PostReply postId={post.id} />
             </DetailWrapper>
         </PostContainer>
     );
