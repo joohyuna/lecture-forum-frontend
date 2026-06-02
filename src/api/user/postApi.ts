@@ -27,6 +27,7 @@ const votePost = async (postId: number, option: number) => {
     // 백엔드가 처리후 응답(Response)하는 내용이 필요없으면 return 안해도 됨
 };
 
+// 주소는 같아도 다른 동작 delete
 const cancelVotePost = async (postId: number) => {
     await axiosInstance.delete(`/post/${postId}/vote`);
 };
