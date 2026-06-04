@@ -55,7 +55,7 @@ const PaginationContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 4px;
-    margin-top: 32px;
+    margin-top: 24px;
 `;
 
 const PageNumberButton = styled.button<{ $isActive: boolean }>`
