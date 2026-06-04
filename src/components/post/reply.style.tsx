@@ -29,3 +29,69 @@ export const ReplyForm = styled.form`
     gap: 12px;
     margin-bottom: 40px;
 `;
+
+
+export const ReplyList = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const EmptyMessage = styled.div`
+    text-align: center;
+    padding: 40px 0;
+    color: ${props => props.theme.colors.text.disabled};
+    font-size: 15px;
+`;
+
+export const ReplyItem = styled.div`   
+    padding: 24px 0;
+    border-bottom: 1px solid ${props => props.theme.colors.divider};
+    
+    &:last-child {
+        border-bottom: none;
+    }
+`;
+
+export const ReplyHeader = styled.div`
+     display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    
+    .author-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        strong {
+            font-size: 15px;
+        }
+        
+        .date {
+            font-size: 13px;
+            color: ${props => props.theme.colors.text.disabled};
+        }
+    }
+    
+    .delete-btn {
+        background: ${props => props.theme
+            .colors.error};
+        border: none;
+        color: #ffffff;
+        font-size: 13px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+`;
+
+
+export const ReplyContent = styled.p`
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+`;

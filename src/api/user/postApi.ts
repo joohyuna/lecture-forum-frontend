@@ -8,6 +8,7 @@ const fetchPostListByCategory = async (
     page: number,
     size: number,
 ): Promise<PaginationResponseType<Post>> => {
+    // 여기 내용은 초보가 하는 행동임 replyApi에 업그레이드 params 방식 으로 저장되어 있음
     const response = await axiosInstance.get(`/post/list/${categoryId}?page=${page}&size=${size}`);
     return response.data.data;
 };
