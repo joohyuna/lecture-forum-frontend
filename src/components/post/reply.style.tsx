@@ -71,6 +71,21 @@ export const ReplyHeader = styled.div`
             color: ${props => props.theme.colors.text.disabled};
         }
     }
+
+    .modify-btn {
+        background: ${props => props.theme
+            .colors.warning};
+        border: none;
+        color: #ffffff;
+        font-size: 13px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
     
     .delete-btn {
         background: ${props => props.theme

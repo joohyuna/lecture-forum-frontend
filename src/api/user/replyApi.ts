@@ -10,6 +10,14 @@ const createReply = async (postId: number, content: string) => {
     return response.data.data;
 };
 
+const updateReply = async (replyId: number, content: string) => {
+    const response = await axiosInstance.patch(`/reply/${replyId}`, {
+        content,
+    });
+    return response.data.data;
+};
+
+
 const getRepliesByPostId = async (postId: number, page?: number, size?: number): Promise<PaginationResponseType<Reply>> => {
     // 이렇게 매개변수에 page와 size를 받는다면 이 getRepliesByPostId 함수를 실행할 때 postId, page, size 가 필수값이라는 소리
     // 마찬가지로 axios를 사용할 때 경로에 /reply/${postId}?page=${page}&size=${size} 를 쓰게 되면
@@ -38,6 +46,7 @@ const deleteReply = async (replyId: number): Promise<void> => {
 
 export default {
     createReply,
+    updateReply,
     getRepliesByPostId,
     deleteReply,
 };
