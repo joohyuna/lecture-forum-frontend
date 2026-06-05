@@ -1,33 +1,30 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-    type CreateReplyInputType,
-    createReplySchema,
-} from "../../schemas/reply/createReplySchema.ts";
-import {
-    EmptyMessage,
-    ReplyContainer,
-    ReplyContent,
-    ReplyForm,
-    ReplyHeader,
-    ReplyItem,
-    ReplyList,
-    ReplyTitle,
-} from "./reply.style.tsx";
+import { EmptyMessage, ReplyContainer, ReplyList, ReplyTitle } from "./reply.style.tsx";
 import { LuMessageSquare } from "react-icons/lu";
-import TextareaGroup from "../common/textarea/TextareaGroup.tsx";
-import Button from "../common/button/Button.tsx";
 import { useAuthStore } from "../../stores/auth/authStore.ts";
 import replyApi from "../../api/user/replyApi.ts";
 import { useCallback, useEffect, useState } from "react";
 import type { Reply } from "../../types/reply.type.ts";
 import ReplyPagination from "../common/pagination/ReplyPagination.tsx";
+import ReplyForm from "./reply/ReplyForm.tsx";
+import ReplyItem from "./reply/ReplyItem.tsx";
 
 interface Props {
     postId: number;
 }
 
 function PostReply({ postId }: Props) {
+    // 우리는 댓글 요청을 백엔드에 해주려면,
+    //      userId, PostId, content가 필요하다는 것을 알고 있음.
+    //
+    //      userId라는 건 req.headers에 자동으로 axios가 토큰을 넣으니깐 신경 X
+    //      postId와 content가 필요한데
+    //      content는 PostReply 컴포넌트 안에서 input 또는 textarea로 받을거니까
+    //      PostReply가 이건 갖고 있음,
+    //
+    //      우리가 준비해야 되는건 postId
+
+    //  PostDetailPage에서 PostReply를 불러오는 구조라는 걸 알고 있음.
+
     // 사용자가 댓글 내용을 입력하고, 그걸 백엔드에게 저장해 달라고 요청
     const { isLoggedIn, user } = useAuthStore();
     const [list, setList] = useState<Reply[]>([]);
@@ -50,7 +47,7 @@ function PostReply({ postId }: Props) {
 
     const loadReplies = useCallback(
         async (page: number) => {
-            // 이 함수가 갖데 되는 "page" 변수는 부모가 갖고 있는 page state가 아니라 page 매겨변수가 됨.
+            // 이 함수가 갖게 되는 "page" 변수는 부모가 갖고 있는 page state가 아니라 page 매겨변수가 됨.
             // 의존성 에서 page 삭제
             try {
                 const result = await replyApi.getRepliesByPostId(postId, page, size);
@@ -71,89 +68,18 @@ function PostReply({ postId }: Props) {
         loadReplies(1).then(() => {});
     }, [loadReplies]);
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors, isSubmitting },
-    } = useForm({
-        resolver: zodResolver(createReplySchema),
-        mode: "onBlur",
-    });
-
-    useEffect(() => {
-        reset({
-            postId,
-        });
-    }, [postId, reset]);
-
     // submit을 하는데 zod가 "너 postId 없는데?" 라서 진행이 안 됐던 것
     // postId는 PostReply 컴포넌트가 Props를 통ㅇ해 전달을 받고 있는데
     // 그 값이 react-hook-form이 관리학소 있는 state에 기록이 안돼서
     // 그래서 그걸 postId의 값이 도착하면 useEffect가 발동하면서 react-hook-form의 state에 값을 넣어주도록 함
 
-    const onSubmit = async (data: CreateReplyInputType) => {
-        try {
-            await replyApi.createReply(postId, data.content);
-            reset({
-                postId,
-                content: "",
-            }); // textarea에 값이 입력되어져 있는 상태이기 때문에 그걸 비울려고
-            // reset을 사용하지 않고, setValue 기능을 꺼내와서 setValue("content", "")
-            await loadReplies(1);
-            // 댓글을 불러오는 기능
-            // 1. 내가 댓글을 작성하면 실행
-            // 2. 글 내용을 보면, 이미 댓글 목록도 불러와졌어야 함
-            // 2-1. 댓글 목록 먼저 불러와야함
-        } catch (error) {
-            console.log("댓글 작성 실패 : ", error);
-            alert(" 댓글 작성중 오류가 발생했습니다.");
-        }
-    };
-
-    const handleDeleteReply = async (replyId: number) => {
-        if (!confirm("정말 이 댓글을 삭제하시겠습니까?")) return;
-
-        try {
-            await replyApi.deleteReply(replyId);
-            await loadReplies(1);
-
-        } catch (error) {
-            console.log("댓글 삭제 실패 : ", error);
-            alert("댓글 삭제 중 오류가 발생되었습니다. ");
-        }
-    };
-
     return (
         <ReplyContainer>
             <ReplyTitle>
                 <LuMessageSquare size={20} />
-                댓글 <span className={"count"}>0</span>
+                댓글 <span className={"count"}>{total}</span>
             </ReplyTitle>
-            <ReplyForm onSubmit={handleSubmit(onSubmit)}>
-                <div style={{ flex: 1 }}>
-                    <TextareaGroup
-                        style={{ minHeight: "40px" }}
-                        placeholder={
-                            isLoggedIn
-                                ? "토론에 대한 의견을 남겨주세요"
-                                : "로그인 후 댓글을 작성할 수 있습니다."
-                        }
-                        errorMessage={errors.content?.message}
-                        registerObj={register("content")}
-                        disabled={!isLoggedIn || isSubmitting}
-                    />
-                </div>
-
-                <Button
-                    color={isLoggedIn ? "primary" : "secondary"}
-                    variant={"contained"}
-                    type={"submit"}
-                    style={{ minWidth: "100px" }}
-                    disabled={!isLoggedIn || isSubmitting}>
-                    {isSubmitting ? "등록 중..." : "댓글 등록"}
-                </Button>
-            </ReplyForm>
+            <ReplyForm postId={postId} loadReplies={loadReplies} isLoggedIn={isLoggedIn} />
 
             <ReplyList>
                 {isLoading ? (
@@ -162,30 +88,12 @@ function PostReply({ postId }: Props) {
                     <EmptyMessage>가장 먼저 토론에 참여해 보세요</EmptyMessage>
                 ) : (
                     list.map(item => (
-                        <ReplyItem key={item.id}>
-                            <ReplyHeader>
-                                <div className={"author-info"}>
-                                    <strong>{item.user.nickname}</strong>
-                                    <span className={"date"}>
-                                        {new Date(item.createdAt).toLocaleString("ko-KR", {
-                                            year: "numeric",
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })}
-                                    </span>
-                                </div>
-                                {user?.id === item.userId && (
-                                    <button
-                                        className={"delete-btn"}
-                                        onClick={() => handleDeleteReply(item.id)}>
-                                        삭제
-                                    </button>
-                                )}
-                            </ReplyHeader>
-                            <ReplyContent>{item.content}</ReplyContent>
-                        </ReplyItem>
+                        <ReplyItem
+                            key={item.id}
+                            item={item}
+                            user={user}
+                            loadReplies={loadReplies}
+                        />
                     ))
                 )}
             </ReplyList>
@@ -196,5 +104,3 @@ function PostReply({ postId }: Props) {
 }
 
 export default PostReply;
-
-// 우리는 댓글 요청을 백엔드에 해주려면

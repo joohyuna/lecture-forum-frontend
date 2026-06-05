@@ -15,7 +15,7 @@ const mockPostList = [
     {
         title: "아이스 아메리카노 vs 따뜻한 아메리카노",
         option1Text: "얼죽아",
-        option2Text: "쪄죽아",
+        option2Text: "쪄죽따",
     },
     {
         title: "치킨 먹을 때",
@@ -85,6 +85,7 @@ async function generatePosts(categoryId, count) {
             // Math.floor() : 소수점 이하 버림
             // Math.random() : 0 이상 1 미만의 랜덤 실수 반환
             // mockPostList.length = 7   *  0~1    => 최소 0부터 최대 6.xxxx  => 0 ~ 6
+            // [] 연결법
             const topic = mockPostList[Math.floor(Math.random() * mockPostList.length)];
 
             const dummyData = {
@@ -93,10 +94,10 @@ async function generatePosts(categoryId, count) {
                 option2Text: topic.option2Text,
                 categoryId: categoryId,
                 content:
-                    "이 게시글은 토론 대난투 시스템을 검증하기 위해 생성된 자동화 테스트 글입니다.\n\n" +
+                    "이 게시글은 토론대난투 시스템을 검증하기 위해 생성된 자동화 테스트 글입니다.\n\n" +
                     "과연 여러분의 선택은 어느 쪽인가요?\n" +
-                    `1번 ${topic.option1Text}과 2번 ${topic.option2Text}중 마음에 드는 진영에 투표하고` +
-                    "아래 댓글 창에서 논리 제압을 시작해주세요",
+                    `1번 ${topic.option1Text} 과 2번 ${topic.option2Text} 중 마음에 드는 진영에 투표하고` +
+                    "아래 댓글 창에서 논리 제압을 시작해주세요!",
             };
 
             const response = await fetch(POST_CREATE_URL, {
@@ -153,3 +154,16 @@ runSeeder().then(() => {});
 // 동일한 사용자로서만 사용이 가능해진다.
 
  // vote는 1인 1투표이기 때문에 프론트엔드에서는 seeding하기가 어려움
+
+
+
+
+// 동일한 사용자가 마음에 안들면
+// 한 사람이 글을 작성하고 있다는 것이 결정되는 요소는 "토근"이다.
+// => 그럼 매 요청 때 전달되는 "토큰"을 바꿔주면 되겠네?
+// 그럼 토큰은 프론트엔드 입장에서 언제 받아지지?
+// => 로그인(signIn)을 할 때 "username"과 "password"를 넣으면 토큰을 백엔드가 전달해주네?
+
+// mockPostList를 준비했던 것 처럼, 사용자의 "username"과
+// "password"를 준비해서 그걸로 로그인 요청을 먼저 보내고
+// 받아온 토큰을 저장해뒀다가 계속 교체하며 글 등록을 요청하면 되겠다
