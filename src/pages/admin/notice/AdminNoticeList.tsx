@@ -7,14 +7,14 @@ import {
     AdminLoadingText,
     AdminPageHeader,
     AdminTable,
-    AdminTableWrapper, AdminTd,
+    AdminTableWrapper,
+    AdminTd,
     AdminTh,
     AdminTitle,
 } from "../../../components/admin/admin.style.tsx";
 import Button from "../../../components/common/button/Button.tsx";
 import Card from "../../../components/common/card/Card.tsx";
 import Pagination from "../../../components/common/pagination/Pagination.tsx";
-
 
 function AdminNoticeList() {
     const [list, setList] = useState<Notice[]>([]);
@@ -66,7 +66,7 @@ function AdminNoticeList() {
                     color={"primary"}
                     variant={"contained"}
                     as={Link}
-                    to={"admin/notice/create"}>
+                    to={"/admin/notice/create"}>
                     + 공지사항 등록
                 </Button>
             </AdminPageHeader>
