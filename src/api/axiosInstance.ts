@@ -13,7 +13,7 @@ export default api;
 
 // 인터셉터 : 요청을 보내기 전에 axios가 내용을 가로채서 내용을 변경 할 수 있음
 
-// 리퀘스트에 해당하는 인터셉터는 api.interceptors.request에 등록학수 있고,
+// 리퀘스트에 해당하는 인터셉터는 api.interceptors.request에 등록할수 있고,
 // api.interceptors.request.use() 메서드에 해당 내용을 매개변수에 함수로서 작성
 // 내가 무슨질을 할지 직전에 함수
 // 그렇게 집어 넣는 함수의 매개변수 첫 자리에는 Request를 보낼 때의 설정 정보가 들어옴

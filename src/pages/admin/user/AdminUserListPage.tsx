@@ -20,28 +20,86 @@ import { FiEdit, FiTrash } from "react-icons/fi";
 import Pagination from "../../../components/common/pagination/Pagination.tsx";
 
 function AdminUserListPage() {
+    // 선언문 - 왜 선언했는가?
+    // 앞으로 사용자 목록을 출력해주기 위해 백엔드에게 데이터 요청을 보낼테니
+    // 그 받아온 정보를 저장하고 화면에 출력을 해줄
+    // 위의 내용을 생각하면서
+    // /User[]가 저장할 수 있는 초기값 [], list이름을 붙인 state를 선헌한다
     const [list, setList] = useState<User[]>([]);
+
+
+    // 애는 백엔드와의 통신이 진행 중인지 여부를 나타내는
+    //      얘를 통해서 통신 진행 중에서 화면이 출력되지 않도록 제한하기 위해
+    // /boolean이 저장될 수 있는 초기값 true 을 가진, isLoading state를 선언한다
     const [isLoading, setIsLoading] = useState(true);
 
+
+    // 이 컴포넌트는 목록을 출력해줄 목적의 컴포넌트니까,
+    // 페이지네이션이 따라오게끔 설계 되어 있고,
+    // 페이지 네이션을 위해 page와 size가 쿼리 스트링에 포함되므로
+    // /useSearchParams()틀 통해 쿼리 스트링을 불러와야한다 > 쿼리 스트링을 사용한다.
     const [searchParams, setSearchParams] = useSearchParams();
+
     // const pageParams = searchParams.get("page");
-    // const page = page
+    // const page = pageParams ? Number(pageParams) : 1;
+    // 페이지네이션을 하는데 지금 현재 사용자가 보고 있는page 번호를 알아야
+    // 백엔드에게도 그에 맞춰 요청할 것이고, 페이지제이션에도 색깔을 버꿔 출력해 줄 수 있을테니까
+    // 근데 최초 주소는 /admin/user 라는 주소라 쿼리스트링이 없음, 그러니깐 초기값은 논리값으로 계산
+    // /쿼리스트링에 존재하는 page 항목의 값을 가져오거나, 없으면 1을 number타입으로 page 변수에 저장
     const page = Number(searchParams.get("page")) || 1;
 
+
+    // page는 변경이 가능하도록 하디 위해 쿼리스트링에 포함 시켰는데, SIZE
+    // 개발자가 값을 안 바꿀 모양이다 => 쿼리스트링에 SIZE는 포함이 안되나보다
+    // /SIZE라고, "대문자"로 쓴 변수명에 상수로서(바뀌지 않는 값) 20을 저장
     const SIZE = 20; // 고정값
     // const [page, setPage] = useState(1);
+
+    // 페이지네이션을 할 때 마지막 페이지르 계산하기 위한 목적으로 전체 총 공지사항 갯수가 필요하니
+    //그것을 백엔드엑 받아서 저장할 목적으로
+    // /초기값 0의 number 타입 total이라는 state를 선언
     const [total, setTotal] = useState(0);
+
+    // totalPage라는 변수를 만들어준 이유 식을 여러번 쓴다는 건, 개발자에게도 불편한일
+    // 실제 페이지네이션에 출력되는 버튼을 "공지사항 갯수"로 출력하는게 아니라
+    // 총 "페이지 매 수"로 출력하니깐 열러군데서 이에 대새 사용될것 같으니 한번에 계산을 시키고
+    // totalPage만 불러다가 쓰겠다
+    // /total 값을 SIZE로 나누어, 올림한 값을 저장하는 totalPage 변수선언
     const totalPage = Math.ceil(total / SIZE); // Math.ceil() : 올림 메서드
 
+    // /사용자 목록을 불러오는 기능을 함수로 작성
+    // /이 함수는 page: number를 매개변수를 갖는다 , 무엇이 리턴되는지는 아직 모르겠다 리턴이 없음 => 목록만 불러오고 끝나는 함수구나
     const loadUsers = async (page: number) => {
+
+
+        // 아, API에 대해 관리가 관리자 측 기능은 admin 접두사로 시작하는 것같고
+        // 이 기능은 관리자 아니면 사용 못하겠구나
+        // /adminUserAPi라고 작성되어져 잇는 파일에 fetchUserList라는 함수가 실행되는구나
+        // /매개변수로 page와 SIZE를 방아서, 사용자 목록을 백앤드에게 받아오고
+        // /그 별과를 data 변수에 저장
+        //  /data에 마우스를 올려서 팝업을 보니, paginationResponseType<User> 타입이 저장되는구나
+        // /data = {
+        //      page: number,
+        //      size: number,
+        //      total: number,
+        //      list: User[]
+        // }
         try {
             const data = await adminUserApi.fetchUserList(page, SIZE);
+            // 우리가 만든 list라고 하는 state에 date.list를 저장
             setList(data.list);
+            // 우리가 만든 total이라고 하는 state에 data.total을 저장
             setTotal(data.total);
         } catch (error) {
+            // 위에 존재한느 try 중 실행 실패(에러, 오류)가 발생되면 실행되는 내용으로서
+            // 콘솔 로그로 error 출력하고, 사용자 경고창을 띄우고 끝나는구나
+            // 별 다른 에러 처리는 특별히 없네
             console.log(error);
             alert("사용자 목록을 불러오는데 실패했습니다.");
         } finally {
+
+            // isLoading를 가지고서 화면을 출력해줄 때 isLoading이 false에 실 결과가 나오겠구나
+            // try가 끝나든, catch가 끝나든, 어떤한 것이 끝나든 마지막에 isLoading state가 false바뀜
             setIsLoading(false);
         }
     };
@@ -57,6 +115,10 @@ function AdminUserListPage() {
     // 의존성 배열이 state나 함수나, 변수를 집어넣을 수 있는데
     //
 
+
+    // 리엔드에서는 백엔드에서 데이터를 받아오기 위해,
+    // 그 받아오는 함수에 대한 실행을 useEffect 안에 담아줘야 함
+    // useEffect 안에서 백엔드 데이트를 받아오겠구나
     useEffect(() => {
         // 이 함수는, 백엔드에게 내용을 받아서 state에 저장 => 화면 출력을 해주는 함수를 useEffect 매개 변수 안에 작성해서
         // 함수 안에 함수를 선언하고, 그걸 실행 했었음
@@ -65,13 +127,20 @@ function AdminUserListPage() {
 
         // 사용자의 스크롤을 이동시키는 명령
         // window 브라우저에서 사용자의 위치to
+        // 사용자를 최상단으로 올려주는것
         window.scrollTo({ top: 0, behavior: "instant" });
 
         // 문법 오류
         // eslint-disable-next-line react-hooks/set-state-in-effect
         loadUsers(page).then(() => {});
+
+        // page state의 값이 바뀔때 마다 게시글 목록을 해당 page번호에 맞추어 다시 백엔드에게 받아오고
+        // 화면 위치를 맨 위로 옯기겠구나
+        // page state의 값이 바뀔때 마다 useEffect 제발동 되겠구나
     }, [page]);
 
+
+    // handler (핸들러) : 무언가 동작을 실행시키는 함수 : 사용자 상호작용을 통해 무언가 동작을 실행시키는 함수
     const handleDelete = async (id: number) => {
         // confirm은 사용자에게 경고차을 통해 확인을 받는 메서드, true/false가 반환됨
         // 그렇게 최소를 하면 더이상 함수 진행을 안함
@@ -99,11 +168,16 @@ function AdminUserListPage() {
         }
     };
 
+    // 페이지 번호를 (매개변호)를 통해 page의 값을 변화시키는 핸들러
     const handlePageChange = (page: number) => {
         // status의 값을 바로 바꾸는게 아니라,
         // 쿼리스트링에 존재하는 page의 값을 변경해야 함
+
+        // 얘만 해주면 useEffect가 발동
+        // useSearchParams(); 너 저기 있는 주소의 내요을 가져와서 복사해
+        // searchParams : state 연동된게 아니락 복사한것
         searchParams.set("page", page.toString()); // searchParams 내부의 page  프로퍼티 값을 변경
-        setSearchParams(searchParams); // 주소 변경
+        setSearchParams(searchParams); // 주소 변경 내가 가지고 있는 정보를 가지고 주소값을 바꾸는것임
     };
 
     return (
@@ -122,14 +196,16 @@ function AdminUserListPage() {
                     <AdminTableWrapper>
                         <AdminTable>
                             <thead>
-                                <AdminTh $width={"5%"}>ID</AdminTh>
-                                <AdminTh $width={"15%"}>아이디</AdminTh>
-                                <AdminTh $width={"15%"}>이름 (닉네임)</AdminTh>
-                                <AdminTh $width={"20%"}>이메일</AdminTh>
-                                <AdminTh $width={"10%"}>권한</AdminTh>
-                                <AdminTh $width={"10%"}>상태</AdminTh>
-                                <AdminTh $width={"15%"}>가입일</AdminTh>
-                                <AdminTh $width={"10%"}>관리</AdminTh>
+                                <tr>
+                                    <AdminTh $width={"5%"}>ID</AdminTh>
+                                    <AdminTh $width={"15%"}>아이디</AdminTh>
+                                    <AdminTh $width={"15%"}>이름 (닉네임)</AdminTh>
+                                    <AdminTh $width={"20%"}>이메일</AdminTh>
+                                    <AdminTh $width={"10%"}>권한</AdminTh>
+                                    <AdminTh $width={"10%"}>상태</AdminTh>
+                                    <AdminTh $width={"15%"}>가입일</AdminTh>
+                                    <AdminTh $width={"10%"}>관리</AdminTh>
+                                </tr>
                             </thead>
                             <tbody>
                                 {list.length === 0 && (
@@ -193,9 +269,9 @@ function AdminUserListPage() {
                 )}
                 {total > 0 && (
                     <Pagination
-                    currentPage={page}
-                    totalPage={totalPage}
-                    onPageChange={handlePageChange}
+                        currentPage={page}
+                        totalPage={totalPage}
+                        onPageChange={handlePageChange}
                     />
                 )}
             </Card>
