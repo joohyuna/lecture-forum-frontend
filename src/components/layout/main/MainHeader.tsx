@@ -103,6 +103,9 @@ function MainHeader() {
                 </Nav>
 
                 <NavGroup>
+                    <Button color={"primary"} variant={"text"} as={Link} to={"/notice"}>
+                        공지사항
+                    </Button>
                     <Button color={"primary"} variant={"icon"} onClick={onChangeTheme}>
                         {theme === "light" ? <IoSunny size={20} /> : <IoMoon size={20} />}
                     </Button>
@@ -112,15 +115,13 @@ function MainHeader() {
                                 <FiUser size={20} />
                             </Button>
                             {user?.role === Role.ADMIN && (
-                                <Button
-                                    color={"primary"}
-                                    variant={"icon"}
-                                    as={Link}
-                                    to={"/admin"}>
+                                <Button color={"primary"} variant={"icon"} as={Link} to={"/admin"}>
                                     <FiSettings size={20} />
                                 </Button>
                             )}
-                            <Button color={"error"} variant={"contained"} onClick={logout}>로그아웃</Button>
+                            <Button color={"error"} variant={"contained"} onClick={logout}>
+                                로그아웃
+                            </Button>
                         </>
                     ) : (
                         <>
