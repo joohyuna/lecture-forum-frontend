@@ -53,7 +53,6 @@ const MySidebar = styled.aside`
     border: 1px solid ${props => props.theme.colors.divider};
     display: flex;
     flex-direction: column;
-   
 `;
 const SidebarHeader = styled(Link)`
     height: 64px;

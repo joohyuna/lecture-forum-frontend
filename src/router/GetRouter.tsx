@@ -75,7 +75,10 @@ const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
             { index: true, element: <HomePage /> },
-            { path: "category", children: [{ path: ":categoryId", element: <PostListPage /> }] },
+            {
+                path: "category",
+                children: [{ path: ":categoryId", element: <PostListPage /> }],
+            },
             {
                 path: "post",
                 children: [

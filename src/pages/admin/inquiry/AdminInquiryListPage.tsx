@@ -7,7 +7,8 @@ import {
     AdminLoadingText,
     AdminPageHeader,
     AdminTable,
-    AdminTableWrapper, AdminTd,
+    AdminTableWrapper,
+    AdminTd,
     AdminTh,
     AdminTitle,
 } from "../../../components/admin/admin.style.tsx";
@@ -49,7 +50,7 @@ function AdminInquiryListPage() {
     const handlePageChange = (page: number) => {
         searchParams.set("page", page.toString());
         setSearchParams(searchParams);
-    }
+    };
 
     return (
         <AdminContainer>
