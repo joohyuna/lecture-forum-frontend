@@ -51,7 +51,8 @@ function PostCreatePage() {
     const onSubmit = async (input: CreatePostInputType) => {
         try {
             await postApi.createPost(input);
-            // 1.
+            // 1. 사용자를 게시글 목록으로 이동
+            //
             navigate(`/category/${categoryId}`);
         } catch (error) {
             console.error(error);

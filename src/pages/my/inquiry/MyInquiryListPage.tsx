@@ -114,7 +114,7 @@ function MyInquiryListPage() {
 
             <Pagination currentPage={page} totalPage={totalPage} onPageChange={onPageChange} />
         </PostContainer>
-    );;
+    );
 }
 
 export default MyInquiryListPage;
