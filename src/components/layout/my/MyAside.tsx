@@ -1,50 +1,38 @@
+import { FiLock, FiMessageSquare, FiUser, FiUserX } from "react-icons/fi";
 import styled from "styled-components";
-import { FiBell, FiGrid, FiHome, FiMessageSquare, FiUser } from "react-icons/fi";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 
-const adminNavList = [
+const myNavList = [
     {
-        path: "/admin/category",
-        label: "카테고리 관리",
-        icon: <FiGrid size={18} />,
-    },
-    {
-        path: "/admin/user",
-        label: "유저 관리",
+        path: "/my",
+        label: "회원정보변경",
         icon: <FiUser size={18} />,
     },
     {
-        path: "/admin/notice",
-        label: "공지사항 관리",
-        icon: <FiBell size={18} />,
+        path: "/my/password",
+        label: "비밀번호변경",
+        icon: <FiLock size={18} />,
     },
     {
-        path: "/admin/inquiry",
-        label: "1:1 문의관리",
+        path: "/my/inquiry",
+        label: "1:1 문의",
         icon: <FiMessageSquare size={18} />,
     },
     {
-        path: "/",
-        label: "서비스로 돌아가기",
-        icon: <FiHome size={18} />,
+        path: "/my/withdraw",
+        label: "회원 탈퇴",
+        icon: <FiUserX size={18} />,
     },
 ];
 
-// => 그냥 묶어주는것 ()
-function AdminAside() {
-    // 사용자가 현재 위치하 경로를 가져오기 위해 useLocation()를 준비하면,
-    // location.pathname에 저장되어 있음
-    const location = useLocation();
-
-    //   /admin/category
-
+function MyAside() {
     return (
-        <AdminSidebar>
-            <SidebarHeader to={"/admin"}>관리자 센터</SidebarHeader>
+        <MySidebar>
+            <SidebarHeader to={"/my"}>마이페이지</SidebarHeader>
             <SidebarMenu>
-                {adminNavList.map((item, index) => {
-                    // 지금 현재 사용자가 있는 위치에 따라 MenuItem 글자의 색상을 다르게 해줄 것임
+                {myNavList.map((item, index) => {
                     const isActive = item.path === location.pathname;
+
                     return (
                         <MenuItem to={item.path} key={index} $isActive={isActive}>
                             {item.icon}
@@ -53,20 +41,20 @@ function AdminAside() {
                     );
                 })}
             </SidebarMenu>
-        </AdminSidebar>
+        </MySidebar>
     );
 }
 
-export default AdminAside;
+export default MyAside;
 
-const AdminSidebar = styled.aside`
-    width: 260px;
+const MySidebar = styled.aside`
+    width: 240px;
     background-color: ${props => props.theme.colors.background.paper};
-    border-right: 1px solid ${props => props.theme.colors.divider};
+    border: 1px solid ${props => props.theme.colors.divider};
     display: flex;
     flex-direction: column;
+   
 `;
-
 const SidebarHeader = styled(Link)`
     height: 64px;
     display: flex;
@@ -74,15 +62,15 @@ const SidebarHeader = styled(Link)`
     padding: 0 24px;
     font-size: 20px;
     font-weight: 800;
-    color: ${props => props.theme.colors.primary};
     border-bottom: 1px solid ${props => props.theme.colors.divider};
 `;
 
 const SidebarMenu = styled.nav`
     display: flex;
     flex-direction: column;
-    padding: 16px 0;
-    gap: 8px;
+    margin-bottom: 5px;
+    gap: 4px;
+    flex: 1;
 `;
 
 const MenuItem = styled(Link)<{ $isActive: boolean }>`
