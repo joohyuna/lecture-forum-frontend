@@ -10,10 +10,12 @@ import {
     LoadingText,
     PostContainer,
 } from "../../../../components/post/post.style.tsx";
-import { AdminButtonGroup } from "../../../../components/admin/admin.style.tsx";
+import { AdminButtonGroup, AnswerSection } from "../../../../components/admin/admin.style.tsx";
 import Button from "../../../../components/common/button/Button.tsx";
 import type { Inquiry } from "../../../../types/inquiry.type.ts";
 import adminInquiryApi from "../../../../api/admin/adminInquiryApi.ts";
+import AdminInquiryAnswerForm from "../../../../components/inquiry/AdminInquiryAnswerForm.tsx";
+import AdminInquiryAnswerBox from "../../../../components/inquiry/AdminInquiryAnswerBox.tsx";
 
 function AdminInquiryDetailPage() {
     // 글의 내용을 받아와서
@@ -23,6 +25,7 @@ function AdminInquiryDetailPage() {
 
     // router 의 id 임
     const { id } = useParams<{ id: string }>();
+    const inquiryId = Number(id);
 
     useEffect(() => {
         const loadInquiry = async () => {
@@ -63,7 +66,18 @@ function AdminInquiryDetailPage() {
                     </DetailInfo>
                 </DetailHeader>
 
+
                 <DetailContent>{inquiry.content}</DetailContent>
+
+                <hr />
+
+                {/*
+                    만약에, 답변에 아직 달리지 않았다면 Textarea를 띄워서 답변을 달 수 있도록 할 것이고
+                    답변이 이미 달렸다면 답변 내용이 출력뒬수 있도록
+                */}
+                <AnswerSection>
+                    {inquiry.answer ? (<AdminInquiryAnswerBox />) : (<AdminInquiryAnswerForm inquiryId={inquiryId} />)}
+                </AnswerSection>
 
                 <AdminButtonGroup style={{ marginTop: "40px" }}>
                     <Button color={"secondary"} variant={"contained"} onClick={() => navigate(-1)}>
