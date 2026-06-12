@@ -35,7 +35,7 @@ function MyInquiryEditPage() {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: zodResolver(inquirySchema),
-        mode: "noBlur",
+        mode: "onBlur",
     });
 
     useEffect(() => {
