@@ -68,11 +68,11 @@ function MyInquiryEditPage() {
     };
 
     if (isLoading) {
-        return <PostContainer>
-            <LoadingText>
-                데이터를 불러오는 중입니다.
-            </LoadingText>
-        </PostContainer>
+        return (
+            <PostContainer>
+                <LoadingText>데이터를 불러오는 중입니다.</LoadingText>
+            </PostContainer>
+        );
     }
 
     return (
