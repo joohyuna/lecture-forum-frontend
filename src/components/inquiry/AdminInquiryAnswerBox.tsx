@@ -7,24 +7,25 @@ import {
 } from "../admin/admin.style.tsx";
 import Button from "../common/button/Button.tsx";
 import adminInquiryApi from "../../api/admin/adminInquiryApi.ts";
+import type { Dispatch, SetStateAction } from "react";
 
 interface Props {
     inquiry: Inquiry;
     reload: () => Promise<void>;
+    setIsEdit: Dispatch<SetStateAction<boolean>>;
 }
 
-function AdminInquiryAnswerBox({ inquiry, reload }: Props) {
+function AdminInquiryAnswerBox({ inquiry, reload, setIsEdit }: Props) {
     const handleDeleteAnswer = async () => {
         try {
             await adminInquiryApi.deleteInquiryAnswer(inquiry.id);
             // 글 상세 내용을 다시 받아와야 함
             await reload();
-
         } catch (error) {
             console.log(error);
-            alert ("관리자 답변 삭제 중 오류가 발생했습니다.");
+            alert("관리자 답변 삭제 중 오류가 발생했습니다.");
         }
-    }
+    };
     // 답변 내용이 출력되는 컴포넌트
 
     return (
@@ -39,8 +40,12 @@ function AdminInquiryAnswerBox({ inquiry, reload }: Props) {
             <AnswerContent className={"answer-content"}>{inquiry.answer}</AnswerContent>
 
             <AdminButtonGroup $align={"right"} style={{ marginTop: "24px" }}>
-                <Button variant={"contained"} color={"warning"}>답변수정</Button>
-                <Button variant={"contained"} color={"error"} onClick={handleDeleteAnswer}>답변삭제</Button>
+                <Button variant={"contained"} color={"warning"} onClick={() => setIsEdit(true)}>
+                    답변수정
+                </Button>
+                <Button variant={"contained"} color={"error"} onClick={handleDeleteAnswer}>
+                    답변삭제
+                </Button>
             </AdminButtonGroup>
         </AnswerDisplay>
     );
