@@ -1,5 +1,4 @@
 import axiosInstance from "../axiosInstance.ts";
-import type { Inquiry } from "../../types/inquiry.type.ts";
 import type { AdminInquiryAnswerInputType } from "../../schemas/admin/inquiry/admininInquiryAnswerSchema.ts";
 
 const getInquiryList = async (page?: number, size?: number) => {
@@ -12,7 +11,7 @@ const getInquiryList = async (page?: number, size?: number) => {
     return response.data.data;
 };
 
-const getInquiryById = async (inquiryId: number): Promise<Inquiry> => {
+const getInquiryById = async (inquiryId: number) => {
     const response = await axiosInstance.get(`/admin/inquiry/${inquiryId}`);
     return response.data.data;
 };
@@ -23,8 +22,13 @@ const updateInquiryAnswer = async (inquiryId: number, input: AdminInquiryAnswerI
     return response.data.data;
 };
 
+const deleteInquiryAnswer = async (inquiryId: number) => {
+    await axiosInstance.delete(`/admin/inquiry/${inquiryId}`);
+}
+
 export default {
     getInquiryList,
     getInquiryById,
-    updateInquiryAnswer
+    updateInquiryAnswer,
+    deleteInquiryAnswer,
 };

@@ -12,9 +12,10 @@ import adminInquiryApi from "../../api/admin/adminInquiryApi.ts";
 
 interface Props {
     inquiryId: number;
+    reload: () => Promise<void>;
 }
 
-function AdminInquiryAnswerForm({ inquiryId }: Props) {
+function AdminInquiryAnswerForm({ inquiryId, reload }: Props) {
     // 답변을 다는 역할을 하려면
 
     // 글 등록 (생성) 을 생각하는 것과 동일
@@ -24,7 +25,7 @@ function AdminInquiryAnswerForm({ inquiryId }: Props) {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm({
+    } = useForm<AdminInquiryAnswerInputType>({
         resolver: zodResolver(adminInquiryAnswerSchema),
         mode: "onBlur",
     });
@@ -32,9 +33,11 @@ function AdminInquiryAnswerForm({ inquiryId }: Props) {
     const onSubmit = async (data: AdminInquiryAnswerInputType) => {
         try {
             await adminInquiryApi.updateInquiryAnswer(inquiryId, data);
+            // 글 내용을 다시 불러오는 기능을 재실행
+            await reload();
         } catch (error) {
             console.log(error);
-            alert("답변 목록중 오류가 발생했습니다.");
+            alert("답변 등록중 오류가 발생했습니다.");
         }
     };
 

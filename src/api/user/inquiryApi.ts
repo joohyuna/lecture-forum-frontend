@@ -21,7 +21,7 @@ const getMyInquiryById = async (inquiryId: number): Promise<Inquiry> => {
     return response.data.data;
 };
 
-const createInquiry = async (input: InquiryInputType) => {
+const createInquiry = async (input: InquiryInputType): Promise<Inquiry> => {
     const response = await axiosInstance.post("/inquiry/create", input);
 
     return response.data.data;

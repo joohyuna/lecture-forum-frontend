@@ -10,7 +10,7 @@ const fetchCategoryList = async (): Promise<Category[]> => {
 
 
 // 카테고리 수정시 input에 초기값 설정 API
-const fetchCategoryById = async (id: number): Promise<Category> => {
+const fetchCategoryById = async (id: number) => {
     const response = await axiosInstance.get(`/admin/category/${id}`);
     return response.data.data;
 }
