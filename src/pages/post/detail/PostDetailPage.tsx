@@ -22,7 +22,6 @@ function PostDetailPage() {
     const [post, setPost] = useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-
     const { id } = useParams<{ id: string }>();
     const { user } = useAuthStore();
 
@@ -67,9 +66,6 @@ function PostDetailPage() {
 
     if (!post) return;
 
-
-
-
     return (
         <PostContainer>
             <DetailWrapper>
@@ -97,7 +93,7 @@ function PostDetailPage() {
                 </DetailHeader>
                 <DetailContent>{post.content}</DetailContent>
 
-                <PostVote post={post} loadPost={loadPost}/>
+                <PostVote post={post} loadPost={loadPost} />
 
                 <AdminButtonGroup style={{ marginTop: "40px" }}>
                     <Button color={"secondary"} variant={"contained"} onClick={() => navigate(-1)}>

@@ -36,7 +36,6 @@ function MyInquiryDetailPage() {
         loadInquiries().then(() => {});
     }, [inquiryId]);
 
-
     const handleDelete = async () => {
         // 백엔드에 삭제 요청을 하는 함수
         try {
@@ -47,7 +46,7 @@ function MyInquiryDetailPage() {
             console.error(error);
             alert("문의 글 삭제를 진행 중 오류가 발생되었습니다.");
         }
-    }
+    };
 
     if (isLoading) {
         return (

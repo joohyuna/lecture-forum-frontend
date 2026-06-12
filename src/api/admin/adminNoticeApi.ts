@@ -11,19 +11,19 @@ const createNotice = async (input: NoticeInputType): Promise<Notice> => {
     // 2. 그 입력값을 뒤에 우리가 생성한 onSubmit함수에게 전달 하는 기능
     const response = await axiosInstance.post(`/admin/notice/create`, input);
     return response.data.data;
-}
+};
 
 const updateNotice = async (noticeId: number, input: NoticeInputType): Promise<Notice> => {
     const response = await axiosInstance.patch(`/admin/notice/${noticeId}`, input);
     return response.data.data;
-}
+};
 
-const deleteNotice = async (noticeId: number):Promise<void> => {
-    await axiosInstance.delete(`/admin/notice/${noticeId}`);    // HTTP status 200 성공/  HTTP status 500 실패 만 중요함
-}
+const deleteNotice = async (noticeId: number): Promise<void> => {
+    await axiosInstance.delete(`/admin/notice/${noticeId}`); // HTTP status 200 성공/  HTTP status 500 실패 만 중요함
+};
 
 export default {
     createNotice,
     updateNotice,
     deleteNotice,
-}
+};

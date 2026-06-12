@@ -8,7 +8,6 @@ function MyLayout() {
             <div>
                 <MyAside />
             </div>
-
             <ContentArea>
                 <Outlet />
             </ContentArea>
