@@ -13,12 +13,13 @@ import {
 } from "../../../../components/post/post.style.tsx";
 import { AdminButtonGroup } from "../../../../components/admin/admin.style.tsx";
 import Button from "../../../../components/common/button/Button.tsx";
+import { AnswerBox, AnswerHeader } from "../../../../components/inquiry/inquiry.style.ts";
 
 function MyInquiryDetailPage() {
     const { inquiryId } = useParams<{ inquiryId: string }>();
     const navigate = useNavigate();
     const [inquiry, setInquiry] = useState<Inquiry | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const loadInquiries = async () => {
@@ -26,8 +27,8 @@ function MyInquiryDetailPage() {
                 const result = await inquiryApi.getMyInquiryById(Number(inquiryId));
                 setInquiry(result);
             } catch (error) {
-                console.error(error);
-                alert("문의 글을 불러오는데 실패했습니다.");
+                console.log(error);
+                alert("문의 글을 불러오는데 실패하였습니다.");
             } finally {
                 setIsLoading(false);
             }
@@ -43,7 +44,7 @@ function MyInquiryDetailPage() {
             alert("문의글 삭제가 완료 되었습니다.");
             navigate("/my/inquiry");
         } catch (error) {
-            console.error(error);
+            console.log(error);
             alert("문의 글 삭제를 진행 중 오류가 발생되었습니다.");
         }
     };
@@ -51,7 +52,7 @@ function MyInquiryDetailPage() {
     if (isLoading) {
         return (
             <PostContainer>
-                <LoadingText>글 내용을 불러오는 중입니다....</LoadingText>
+                <LoadingText>글 내용을 불러오는 중입니다...</LoadingText>
             </PostContainer>
         );
     }
@@ -77,7 +78,21 @@ function MyInquiryDetailPage() {
                         </div>
                     </DetailInfo>
                 </DetailHeader>
+
                 <DetailContent>{inquiry.content}</DetailContent>
+
+                {inquiry.answer && (
+                    <AnswerBox>
+                        <AnswerHeader>
+                            <span className={"admin-label"}>관리자 답변</span>
+                            <span className={"answer-date"}>
+                                {inquiry.answeredAt &&
+                                    new Date(inquiry.answeredAt).toLocaleString()}
+                            </span>
+                        </AnswerHeader>
+                        <DetailContent className={"answer-content"}>{inquiry.answer}</DetailContent>
+                    </AnswerBox>
+                )}
 
                 <AdminButtonGroup style={{ marginTop: "40px" }}>
                     <Button color={"secondary"} variant={"contained"} onClick={() => navigate(-1)}>
