@@ -1,6 +1,6 @@
 import { FiLock, FiMessageSquare, FiUser, FiUserX } from "react-icons/fi";
 import styled from "styled-components";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const myNavList = [
     {
@@ -26,6 +26,7 @@ const myNavList = [
 ];
 
 function MyAside() {
+    const location = useLocation();
     return (
         <MySidebar>
             <SidebarHeader to={"/my"}>마이페이지</SidebarHeader>
