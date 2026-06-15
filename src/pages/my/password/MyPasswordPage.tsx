@@ -1,7 +1,15 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type UpdatePasswordInputType, updatePasswordSchema } from "../../../schemas/user/updatePasswordSchema.ts";
-import { FormWrapper, PostContainer, PostPageHeader, PostTitle } from "../../../components/post/post.style.tsx";
+import {
+    type UpdatePasswordInputType,
+    updatePasswordSchema,
+} from "../../../schemas/user/updatePasswordSchema.ts";
+import {
+    FormWrapper,
+    PostContainer,
+    PostPageHeader,
+    PostTitle,
+} from "../../../components/post/post.style.tsx";
 import Card from "../../../components/common/card/Card.tsx";
 import InputGroup from "../../../components/common/input/InputGroup.tsx";
 import { AdminButtonGroup } from "../../../components/admin/admin.style.tsx";
@@ -18,9 +26,9 @@ function MyPasswordPage() {
     } = useForm({
         resolver: zodResolver(updatePasswordSchema),
         mode: "onBlur",
-    })
+    });
 
-    const onSubmit = async (data: UpdatePasswordInputType)=> {
+    const onSubmit = async (data: UpdatePasswordInputType) => {
         try {
             await userApi.updatePassword(data);
             alert("비밀번호 수정이 완료되었습니다.");
@@ -28,17 +36,16 @@ function MyPasswordPage() {
                 prevPassword: "",
                 password: "",
                 confirmPassword: "",
-            })
+            });
         } catch (error) {
             console.log(error);
             let errorMessage = "회원 비밀번호 수정 중 오류가 발생되었습니다.";
             if (isAxiosError(error)) {
-                errorMessage = error.response?.data?.message || errorMessage;
+                errorMessage = error.response?.data.message || errorMessage;
             }
             alert(errorMessage);
-
         }
-    }
+    };
 
     return (
         <PostContainer>
@@ -50,8 +57,8 @@ function MyPasswordPage() {
 
             <Card>
                 <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-
                     <InputGroup
+                        type={"password"}
                         label={"현재 비밀번호"}
                         id={"prevPassword"}
                         placeholder={"현재 비밀번호를 입력하세요"}
@@ -60,6 +67,7 @@ function MyPasswordPage() {
                     />
 
                     <InputGroup
+                        type={"password"}
                         label={"변경할 비밀번호"}
                         id={"password"}
                         placeholder={"변경할 비밀번호를 입력하세요"}
@@ -68,6 +76,7 @@ function MyPasswordPage() {
                     />
 
                     <InputGroup
+                        type={"password"}
                         label={"변경할 비밀번호 확인"}
                         id={"confirmPassword"}
                         placeholder={"변경할 비밀번호를 다시 한 번 입력해주세요"}
@@ -77,7 +86,7 @@ function MyPasswordPage() {
 
                     <AdminButtonGroup $align={"right"}>
                         <Button
-                            color="primary"
+                            color={"primary"}
                             variant={"contained"}
                             disabled={isSubmitting}
                             type={"submit"}>

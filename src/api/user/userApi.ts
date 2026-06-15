@@ -8,9 +8,7 @@ const updateUser = async (data: UpdateUserInputType) => {
 };
 
 const updatePassword = async (data: UpdatePasswordInputType) => {
-    await axiosInstance.patch("/user/update", data);
-}
-
-export default { updateUser,
-updatePassword,
+    await axiosInstance.patch("/user/password", data);
 };
+export default { updateUser, updatePassword };
+
