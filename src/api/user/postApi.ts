@@ -3,6 +3,11 @@ import type { PaginationResponseType } from "../../types/common.type.ts";
 import type { Post } from "../../types/post.type.ts";
 import type { CreatePostInputType } from "../../schemas/post/createPostSchema.ts";
 
+const fetchRecentPostsList = async () => {
+    const response = await axiosInstance.get("/post/recent/list");
+    return response.data.data;
+}
+
 const fetchPostListByCategory = async (
     categoryId: number,
     page: number,
@@ -34,6 +39,7 @@ const cancelVotePost = async (postId: number) => {
 };
 
 export default {
+    fetchRecentPostsList,
     fetchPostListByCategory,
     createPost,
     fetchPostById,
