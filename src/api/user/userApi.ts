@@ -3,6 +3,11 @@ import type { UpdateUserInputType } from "../../schemas/user/updateSchema.ts";
 import type { UpdatePasswordInputType } from "../../schemas/user/updatePasswordSchema.ts";
 import type { WithdrawUserInputType } from "../../schemas/user/widthdrawUserSchema.ts";
 
+const getMe = async () => {
+    const response = await axiosInstance.get("/user/me");
+    return response.data.data;
+}
+
 const updateUser = async (data: UpdateUserInputType) => {
     const response = await axiosInstance.patch("/user/update", data);
     return response.data.data;
@@ -19,4 +24,5 @@ export default {
     updateUser,
     updatePassword,
     withdrawUser,
+    getMe,
 };
