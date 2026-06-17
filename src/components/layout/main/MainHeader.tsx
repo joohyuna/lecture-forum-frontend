@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { IoChatbubbles, IoMoon, IoSunny } from "react-icons/io5";
 import Button from "../../common/button/Button.tsx";
 import { useThemeStore } from "../../../stores/theme/themeStore.ts";
@@ -45,17 +45,17 @@ const Nav = styled.nav`
     align-items: center;
     flex: 1;
     gap: 40px;
-    
 `;
 
-const NavItem = styled(Link)`
+const NavItem = styled(Link)<{ $isActive: boolean }>`
     font-size: 16px;
     font-weight: 600;
-    color: ${props => props.theme.colors.text.default};
+    color: ${props =>
+        props.$isActive ? props.theme.colors.primary : props.theme.colors.text.default};
     transition: all 0.3s;
-     
+
     &:hover {
-        color: ${props => props.theme.colors.primary}
+        color: ${props => props.theme.colors.primary};
     }
 `;
 
@@ -65,12 +65,11 @@ const NavGroup = styled.div`
     gap: 16px;
 `;
 
-
 function MainHeader() {
-    const {theme, onChangeTheme} = useThemeStore();
-    const {user, isLoggedIn, logout} = useAuthStore();
+    const { theme, onChangeTheme } = useThemeStore();
+    const { user, isLoggedIn, logout } = useAuthStore();
 
-    const [ list, setList ] = useState<Category[]>([]);
+    const [list, setList] = useState<Category[]>([]);
 
     useEffect(() => {
         const loadList = async () => {
@@ -79,13 +78,13 @@ function MainHeader() {
                 setList(data);
             } catch (error) {
                 console.error(error);
-
             }
-        }
+        };
         loadList().then(() => {});
-    }, [])
+    }, []);
 
     // const navigate = useNavigate();
+    const location = useLocation();
     return (
         <HeaderContainer>
             <HeaderInner>
@@ -95,11 +94,20 @@ function MainHeader() {
                 </Logo>
 
                 <Nav>
-                    {list.map(item => (
-                        <NavItem key={item.id} to={`/category/${item.id}`}>
-                            {item.name}
-                        </NavItem>
-                    ))}
+                    {/* 선생님 코드 */}
+                    {/*{list.map(item => (*/}
+                    {/*    <NavItem key={item.id} to={`/category/${item.id}`}>*/}
+                    {/*        {item.name}*/}
+                    {/*    </NavItem>*/}
+                    {/*))}*/}
+                    {list.map(item => {
+                        const isActive = `/category/${item.id}` === location.pathname;
+                        return (
+                            <NavItem key={item.id} to={`/category/${item.id}`} $isActive={isActive}>
+                                {item.name}
+                            </NavItem>
+                        );
+                    })}
                 </Nav>
 
                 <NavGroup>

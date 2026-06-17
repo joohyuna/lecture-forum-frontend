@@ -75,6 +75,21 @@ export const AdminButtonGroup = styled.div<{ $align?: "left" | "right" | "center
         $align === "right" ? "flex-end" : $align === "center" ? "center" : "flex-start"};
 `;
 
+
+// 내가 만든 dashboard에 들어가는 title
+export const AdminDashboardTitle = styled.div`
+    font-size: 17px;
+    font-weight: 600;
+    padding: 0 0 15px 10px;
+    display: flex;
+    align-items: center;
+    
+    h3 {
+        padding-left: 8px;
+        margin-top: -2px;
+    }
+`;
+
 export const AnswerSection = styled.div`
 margin-top: 32px;
     padding: 24px;
